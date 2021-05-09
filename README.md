@@ -19,13 +19,11 @@ You can customize ptSh scripts in many ways. Config file is in `/home/$USER/.con
 
 Just clone this repository and use `make` to install it
 
-You can make aliases in your `.bashrc` file to use those scripts by default.
+If you want to use ptSh scripts as default you can set aliases in your `.bashrc` file.
+To automatically set all ptSh aliases, add this to your `.bashrc`:
 
 ```shell
-alias ls="ptls"
-alias pwd="ptpwd"
-alias mkdir="ptmkdir"
-alias touch="pttouch"
+source ptSh_set_aliases
 ```
 
 ### Some screenshots
