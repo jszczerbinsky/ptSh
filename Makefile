@@ -9,4 +9,4 @@ install:
 	sudo cp src/ptTouch.sh /usr/bin/pttouch
 	mkdir -p ~/.config
 	mkdir -p ~/.config/ptSh
-	cp src/config ~/.config/ptSh/.config
+	cp src/config ~/.config/ptSh/config
