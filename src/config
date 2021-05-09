@@ -9,28 +9,39 @@
 # Prefix is displayed before file/directory name. Prefix can contain multiple chars.
 # If you want to use a special unicode char as prefix, make sure that your terminal's font can display this char.
 #
-DIR_PREFIX=' '                           # Prefix for directories
-FILE_PREFIX=' '                          # Prefix for files
+DIR_PREFIX=' '                               # Prefix for directories
+FILE_PREFIX=' '                              # Prefix for files
 
 #
 # Escape codes
 # You can set ansi escape codes, that will be displayed before prefixes or names to give them effects, such as color
 #
-DIR_PREFIX_ESCAPE_CODES='\e[35m'          # Escape codes for directory prefix
-FILE_PREFIX_ESCAPE_CODES='\e[94m'         # Escape codes for file prefix
+DIR_PREFIX_ESCAPE_CODES='\e[35m'              # Escape codes for directory prefix
+FILE_PREFIX_ESCAPE_CODES='\e[94m'             # Escape codes for file prefix
 
-DIR_NAME_ESCAPE_CODES=''                  # Escape codes for directory name
-FILE_NAME_ESCAPE_CODES=''                 # Escape codes for file name
+DIR_NAME_ESCAPE_CODES=''                      # Escape codes for directory name
+FILE_NAME_ESCAPE_CODES=''                     # Escape codes for file name
 
 
 #
 # Options for ptls script
 #
-LS_MIN_FILE_OFFSET=5                      # Offset between displayed files/directories
+LS_MIN_FILE_OFFSET=5                          # Offset between displayed files/directories
 
 #
 # Options for ptpwd script
 #
-PWD_NEXTLINE_MARGIN=2                     # Left margin increment for next lines (can be 0 as well)
-PWD_SHOW_DIR_PREFIX=1                     # If value is 1 - directory prefixes will be displayed
-PWD_LINE_ESCAPE_CODES=''                  # Escape codes for directory arrow symbol
+PWD_NEXTLINE_MARGIN=2                         # Left margin increment for next lines (can be 0 as well)
+PWD_SHOW_DIR_PREFIX=1                         # If value is 1 - directory prefixes will be displayed
+PWD_LINE_ESCAPE_CODES=''                      # Escape codes for directory arrow symbol
+
+#
+# Options for ptmkdir script
+#
+MKDIR_ERROR_PREFIX_ESCAPE_CODES='\e[91m'      # Escape codes for error prefix
+MKDIR_ERROR_PREFIX='  '                      # Prefix displayed before error message
+MKDIR_ERROR_MESSAGE_ESCAPE_CODES=''           # Escape codes for error message
+MKDIR_SUCCESS_PREFIX_ESCAPE_CODES='\e[92m'    # Escape codes for success prefix
+MKDIR_SUCCESS_PREFIX='  '                    # Prefix displayed before success message
+MKDIR_SUCCESS_MESSAGE_ESCAPE_CODES=''         # Escape codes for success message
+MKDIR_SUCCESS_MESSAGE='Done'                  # Success message
