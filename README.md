@@ -11,6 +11,7 @@ Currently available scripts:
 | `ptls` |  `ls` | `-l` |
 | `ptpwd` | `pwd` | |
 | `ptmkdir` | `mkdir` | all |
+| `pttouch` | `touch` | all |
 
 You can customize ptSh scripts in many ways. Config file is in `/home/$USER/.config/ptSh/config`.
 
@@ -24,6 +25,7 @@ You can make aliases in your `.bashrc` file to use those scripts by default.
 alias ls="ptls"
 alias pwd="ptpwd"
 alias mkdir="ptmkdir"
+alias touch="pttouch"
 ```
 
 ### Some screenshots
