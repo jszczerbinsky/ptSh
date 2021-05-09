@@ -19,7 +19,7 @@ You can customize ptSh scripts in many ways. Config file is in `/home/$USER/.con
 
 Just clone this repository and use `make` to install it
 
-If you want to use ptSh scripts as default you can set aliases in your `.bashrc` file.
+If you want to use ptSh scripts by default you can set aliases in your `.bashrc` file.
 To automatically set all ptSh aliases, add this to your `.bashrc`:
 
 ```shell
