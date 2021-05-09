@@ -6,7 +6,7 @@ ptSh is a packet of shell scripts, that run standard shell commands and display 
 
 Currently available scripts:
 
-| Script name | Corresponding command | Availaible arguments |
+| Script name | Corresponding command | Available arguments |
 | ------------ | ------------ | ------------ |
 | `ptls` |  `ls` | `-l` |
 | `ptpwd` | `pwd` | |
