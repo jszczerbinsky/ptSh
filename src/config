@@ -1,7 +1,7 @@
 # This is ptSh config file
-# You can find default config file in /usr/share/ptSh/config
+# You can find default config file in /usr/local/share/ptSh/config
 # You should not override default config file
-# Path to your config file should be /home/$USER$/.config/ptSh/config
+# Path to your config file should be /home/$USER/.config/ptSh/config
 
 #
 # Prefixes

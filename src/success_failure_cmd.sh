@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /usr/share/ptSh/config
+source /usr/local/share/ptSh/config
 test -f ~/.config/ptSh/config && source ~/.config/ptSh/config
 
 ERR=$( ($(echo $1) $(echo ${@:2})) 2>&1 )
