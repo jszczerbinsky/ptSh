@@ -17,7 +17,9 @@ You can customize ptSh scripts in many ways. Config file is in `/home/$USER/.con
 
 ### Installation
 
-Just clone this repository and use `make` to install it
+Just clone this repository and use `make` to install it.
+
+Additionally, install a font that supports these symbols, like [NerdFonts](https://github.com/ryanoasis/nerd-fonts).
 
 If you want to use ptSh scripts by default you can set aliases in your `.bashrc` file.
 To automatically set all ptSh aliases, add this to your `.bashrc`:
