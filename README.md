@@ -9,7 +9,7 @@ Currently available scripts:
 | Script name | Corresponding command | Available arguments |
 | ------------ | ------------ | ------------ |
 | `ptls` |  `ls` | `-l` |
-| `ptpwd` | `pwd` | |
+| `ptpwd` | `pwd` | all |
 | `ptmkdir` | `mkdir` | all |
 | `pttouch` | `touch` | all |
 
