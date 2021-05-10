@@ -3,22 +3,43 @@
 source /usr/share/ptSh/config
 test -f ~/.config/ptSh/config && source ~/.config/ptSh/config
 
-arg=""
-if [[ $1 == "-"* ]];then
-    arg=$1
+columnSize=0
+
+function getColumnSize(){
+    while read -r line; do
+        read -ra words <<< $line
+        for val in "${words[@]}"; do
+            if (($columnSize < ${#val})); then
+                columnSize=${#val}
+            fi
+        done 
+    done <<<$(ls $arg)
+}
+
+function setArgs(){
+    if [[ $1 != "-"* ]] || [[ $1 == "-l" ]]; then
+        arg=""
+        return 0
+    fi
+    if [[ $1 == *"a"* ]]; then
+        arg="${arg}a"
+    fi
+    if [[ $1 == *"A"* ]]; then
+        arg="${arg}A"
+    fi
+}
+
+arg="-"
+setArgs $1
+
+a="-"
+if [[ ! -z $arg ]];
+    then a=$arg
 fi
 
-LS=$(ls -al --group-directories-first | sed 's/\s+/ /g')
+LS=$(ls ${a}l --group-directories-first)
 
-columnSize=0
-while read -r line; do
-    read -a words <<< $line
-    for val in "${words[@]}"; do
-        if (($columnSize < ${#val})); then
-            columnSize=${#val}
-        fi
-    done 
-done <<<$(ls -a | sed 's/\s+/ /g')
+getColumnSize
 
 columnSize=$(($columnSize+$LS_MIN_FILE_OFFSET))
 
@@ -34,7 +55,7 @@ actualChar=0
 actualColumn=0
 
 echo "$LS" | while read -r line; do
-    if ((i > 2)); then
+    if ((i > 0)); then
         read -a words <<< $line
         word=0
         wordCount=$(echo $line | wc -w)
@@ -66,7 +87,7 @@ echo "$LS" | while read -r line; do
                 echo -ne "${val}\e[0m"
                 actualChar=$((actualChar+${#val}))
 
-                if [[ $arg == *"l"* ]]; then
+                if [[ $1 == *"l"* ]]; then
                     echo ""
                 else
                     for (( i=0; i<$((columnSize-$((actualChar%columnSize)))); i++ )); do
