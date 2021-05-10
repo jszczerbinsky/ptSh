@@ -64,21 +64,33 @@ while read -r line; do
     read -a words <<< $line
     if [[ $(echo $line | wc -w) == 2 ]]; then continue; fi
 
+    link=false
+
     if [[ ${words[0]} == "d"* ]]; then
         filename="${DIR_PREFIX_ESCAPE_CODES}${DIR_PREFIX}\e[0m${DIR_NAME_ESCAPE_CODES}"
+        prefixLength=${#DIR_PREFIX}
     elif [[ ${words[0]} == "l"* ]];then
-        filename="${DIR_PREFIX_ESCAPE_CODES}link\e[0m${DIR_NAME_ESCAPE_CODES}"
+        filename="${LINK_PREFIX_ESCAPE_CODES}${LINK_PREFIX}\e[0m${LINK_NAME_ESCAPE_CODES}"
+        prefixLength=${#LINK_PREFIX}
+        link=true
     else
         filename="${FILE_PREFIX_ESCAPE_CODES}${FILE_PREFIX}\e[0m${FILE_NAME_ESCAPE_CODES}"
+        prefixLength=${#FILE_PREFIX}
     fi
 
     filename="$filename${words[5]}\e[0m"
     
     if [[ $1 == *"l"* ]]; then
         echo -ne $filename
-        actualChar=${#filename}
+        actualChar=$((${#words[5]}+prefixLength))
         align        
-        echo "${words[0]} ${words[2]} ${words[3]}"
+        echo -n "${words[0]} ${words[2]} ${words[3]}"
+
+        if $link; then
+            echo " -> ${words[7]}"
+        else
+            echo
+        fi
     else
         echo -ne $filename
         actualChar=$((actualChar+${#filename}))
@@ -92,5 +104,4 @@ while read -r line; do
         fi
     fi
 done <<<$(echo "$LS")
-echo
 echo

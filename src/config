@@ -11,6 +11,7 @@
 #
 DIR_PREFIX=' '                               # Prefix for directories
 FILE_PREFIX=' '                              # Prefix for files
+LINK_PREFIX=' '                             # Prefix for links
 
 ERROR_PREFIX='  '                            # Prefix displayed before error message
 SUCCESS_PREFIX='  '                          # Prefix displayed before success message
@@ -26,9 +27,11 @@ SUCCESS_MESSAGE='Done'                        # Success message
 #
 DIR_PREFIX_ESCAPE_CODES='\e[35m'              # Escape codes for directory prefix
 FILE_PREFIX_ESCAPE_CODES='\e[94m'             # Escape codes for file prefix
+LINK_PREFIX_ESCAPE_CODES='\e[36m'             # Escape codes for link prefix
 
 DIR_NAME_ESCAPE_CODES=''                      # Escape codes for directory name
 FILE_NAME_ESCAPE_CODES=''                     # Escape codes for file name
+LINK_NAME_ESCAPE_CODES=''                     # Escape codes for link name
 
 ERROR_PREFIX_ESCAPE_CODES='\e[91m'            # Escape codes for error prefix
 ERROR_MESSAGE_ESCAPE_CODES=''                 # Escape codes for error message
