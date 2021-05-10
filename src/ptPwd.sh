@@ -3,30 +3,44 @@
 source /usr/share/ptSh/config
 test -f ~/.config/ptSh/config && source ~/.config/ptSh/config
 
-PWD=$(pwd | sed 's/\// /g')
-read -a words <<< $PWD
+function setval { printf -v "$1" "%s" "$(cat)"; declare -p "$1"; }
 
-wordCount=$(echo $PWD | wc -w)
-spaces=0
-actualWord=0
+eval "$(pwd $@ 2> >(setval err) > >(setval std) )"
 
-if (($PWD_SHOW_DIR_PREFIX == 1)); then
-    echo -ne "${DIR_PREFIX_ESCAPE_CODES}${DIR_PREFIX}\e[0m"
+if [[ ! -z $err ]]; then
+    echo -ne "${ERROR_PREFIX_ESCAPE_CODES}${ERROR_PREFIX}\e[0m"
+    echo -e "${ERROR_MESSAGE_ESCAPE_CODES}$err\e[0m"
+    exit
 fi
-echo -e "${DIR_NAME_ESCAPE_CODES}/\e[0m"
 
-for val in "${words[@]}"; do
-    for (( i=0; i<$spaces; i++ )) do
+if [[ $@ == *"--help"* ]]; then
+    cat <<< $std
+    exit
+fi
+
+IFS='/'
+
+spaces=0
+
+function displayDir(){
+
+    if $2; then
+        echo -ne "${PWD_LINE_ESCAPE_CODES}└ \e[0m"
+    fi
+    if ((PWD_SHOW_DIR_PREFIX == 1)); then
+        echo -ne "${DIR_PREFIX_ESCAPE_CODES}${DIR_PREFIX}\e[0m"
+    fi
+    echo -e "${DIR_NAME_ESCAPE_CODES}$1\e[0m"
+}
+
+displayDir "/" false
+
+for word in ${std:1}; do
+    for (( i=0; i<spaces; i++ )) do
         echo -n " "
     done
 
-    spaces=$((spaces+$PWD_NEXTLINE_MARGIN))
-    echo -ne "${PWD_LINE_ESCAPE_CODES}└ \e[0m"
+    spaces=$((spaces+PWD_NEXTLINE_MARGIN))
 
-if (($PWD_SHOW_DIR_PREFIX == 1)); then
-    echo -ne "${DIR_PREFIX_ESCAPE_CODES}${DIR_PREFIX}\e[0m"
-fi
-    echo -e "${DIR_NAME_ESCAPE_CODES}$val\e[0m"
-
-    actualWord=$((actualWord+1))
+    displayDir $word true
 done
