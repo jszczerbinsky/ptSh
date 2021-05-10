@@ -13,7 +13,7 @@ function getColumnSize(){
                 columnSize=${#val}
             fi
         done 
-    done <<<$(ls $arg)
+    done <<<$(ls $arg 2>/dev/null)
 }
 
 function setArgs(){
@@ -37,7 +37,7 @@ if [[ ! -z $arg ]];
     then a=$arg
 fi
 
-LS=$(ls ${a}l --group-directories-first)
+LS=$(ls ${a}l --group-directories-first 2>/dev/null)
 
 getColumnSize
 
