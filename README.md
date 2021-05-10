@@ -8,7 +8,7 @@ Currently available scripts:
 
 | Script name | Corresponding command | Available arguments |
 | ------------ | ------------ | ------------ |
-| `ptls` |  `ls` | `-l` |
+| `ptls` |  `ls` | `-l`, `-a`, `-A` |
 | `ptpwd` | `pwd` | all |
 | `ptmkdir` | `mkdir` | all |
 | `pttouch` | `touch` | all |
