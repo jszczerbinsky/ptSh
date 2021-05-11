@@ -93,7 +93,7 @@ while read -r line; do
         fi
     else
         echo -ne $filename
-        actualChar=$((actualChar+${#filename}))
+        actualChar=$((${#words[5]}+prefixLength))
         align
         actualChar=$((actualChar+(columnSize-(actualChar%columnSize))))
         actualColumn=$((actualColumn+1))
