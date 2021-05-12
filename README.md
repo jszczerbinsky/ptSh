@@ -36,6 +36,8 @@ To automatically set all ptSh aliases, add this to your `.bashrc`:
 source ptSh_set_aliases
 ```
 
+You can configure colors, messages etc. in config file: `/home/$USER/.config/ptSh/config`
+
 ### Some screenshots
 
 ![](/img/ptls.png)
