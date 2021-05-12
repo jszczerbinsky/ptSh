@@ -25,18 +25,18 @@ SUCCESS_MESSAGE='Done'                        # Success message
 # Escape codes
 # You can set ansi escape codes, that will be displayed before prefixes or names to give them effects, such as color
 #
-DIR_PREFIX_ESCAPE_CODES='\e[35m'              # Escape codes for directory prefix
-FILE_PREFIX_ESCAPE_CODES='\e[94m'             # Escape codes for file prefix
-LINK_PREFIX_ESCAPE_CODES='\e[36m'             # Escape codes for link prefix
+DIR_PREFIX_ESCAPE_CODES='\x1B[35m'            # Escape codes for directory prefix
+FILE_PREFIX_ESCAPE_CODES='\x1B[94m'           # Escape codes for file prefix
+LINK_PREFIX_ESCAPE_CODES='\x1B[36m'           # Escape codes for link prefix
 
 DIR_NAME_ESCAPE_CODES=''                      # Escape codes for directory name
 FILE_NAME_ESCAPE_CODES=''                     # Escape codes for file name
 LINK_NAME_ESCAPE_CODES=''                     # Escape codes for link name
 
-ERROR_PREFIX_ESCAPE_CODES='\e[91m'            # Escape codes for error prefix
+ERROR_PREFIX_ESCAPE_CODES='\x1B[91m'            # Escape codes for error prefix
 ERROR_MESSAGE_ESCAPE_CODES=''                 # Escape codes for error message
 
-SUCCESS_PREFIX_ESCAPE_CODES='\e[92m'          # Escape codes for success prefix
+SUCCESS_PREFIX_ESCAPE_CODES='\x1B[92m'          # Escape codes for success prefix
 SUCCESS_MESSAGE_ESCAPE_CODES=''               # Escape codes for success message
 
 #
