@@ -38,8 +38,6 @@ source ptSh_set_aliases
 
 You can configure colors, messages etc. in config file: `/home/$USER/.config/ptSh/config`
 
-If You are **MacOS** user, You have to replace all `\e` symbols with `\x1B` in config file.
-
 ### Some screenshots
 
 ![](/img/ptls.png)
