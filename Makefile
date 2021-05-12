@@ -7,7 +7,7 @@ install:
 	git rev-parse --short HEAD > $(ver)
 	mkdir -p ~/.local/share/ptSh
 	cp src/config ~/.local/share/ptSh/config
-	cp src/set_aliases.sh ~/.local/bin/ptSh_set_aliases # should this be added to PATH? it could be added to .bashrc instead
+	cp src/set_aliases.sh ~/.local/bin/ptSh_set_aliases
 	cp src/ptsh.sh ~/.local/bin/ptsh
 	cp LICENSE ~/.local/share/ptSh/LICENSE
 	cp src/logo.txt ~/.local/share/ptSh/logo.txt
