@@ -17,6 +17,12 @@ You can customize ptSh scripts in many ways. Config file is in `/home/$USER/.con
 
 ### Installation
 
+#### Install script
+
+Download an installation script from releases and run it.
+
+#### Manual
+
 Just clone this repository and use `make` to install it.
 
 Additionally, install a font that supports these symbols, like [NerdFonts](https://github.com/ryanoasis/nerd-fonts).
