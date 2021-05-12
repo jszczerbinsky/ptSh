@@ -1,7 +1,6 @@
 install:
 	sudo mkdir -p /usr/local/share/ptSh
 	sudo cp src/config /usr/local/share/ptSh/config
-	sudo cp src/success_failure_cmd.sh /usr/local/share/ptSh/success_failure_cmd.sh
 	sudo cp src/set_aliases.sh /usr/local/bin/ptSh_set_aliases
 	sudo cp src/ptLs.sh /usr/local/bin/ptls
 	sudo cp src/ptPwd.sh /usr/local/bin/ptpwd
