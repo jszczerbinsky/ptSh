@@ -17,15 +17,17 @@ You can customize ptSh scripts in many ways. Config file is in `/home/$USER/.con
 
 ### Installation
 
-#### Install script
+You need to install a font, that supports unicode special symbols, like [NerdFonts](https://github.com/ryanoasis/nerd-fonts).
 
-Download an installation script from releases and run it.
+#### Automated installation
 
-#### Manual
+Just download an installation script from [releases](https://github.com/jszczerbinsky/ptSh/releases) and run it.
 
-Just clone this repository and use `make` to install it.
+#### Manual installation
 
-Additionally, install a font that supports these symbols, like [NerdFonts](https://github.com/ryanoasis/nerd-fonts).
+Clone this repository and use `make` to install it.
+
+### Configuration
 
 If you want to use ptSh scripts by default you can set aliases in your `.bashrc` file.
 To automatically set all ptSh aliases, add this to your `.bashrc`:
