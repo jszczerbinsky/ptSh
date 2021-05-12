@@ -19,6 +19,8 @@ You can customize ptSh scripts in many ways. Config file is in `/home/$USER/.con
 
 You need to install a font, that supports unicode special symbols, like [NerdFonts](https://github.com/ryanoasis/nerd-fonts).
 
+Make sure `~/.local/bin` is in PATH
+
 #### Automated installation
 
 Just download an installation script from [releases](https://github.com/jszczerbinsky/ptSh/releases) and run it.
