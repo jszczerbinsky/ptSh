@@ -1,7 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo -e "\e[35m"
 
+# TODO /usr/local does not exist on non-FHS distros like NixOS and Guix
+# put this somewhere else
 cat /usr/local/share/ptSh/logo.txt
 
 echo "Let your shell commands look prettier..."
