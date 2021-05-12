@@ -1,9 +1,13 @@
 ver=/tmp/ptsh_ver
+
+all:
+	@echo Run \'make install\'
+
 install:
 	git rev-parse --short HEAD > $(ver)
 	mkdir -p ~/.local/share/ptSh
 	cp src/config ~/.local/share/ptSh/config
-	cp src/set_aliases.sh ~/.local/bin/ptSh_set_aliases
+	cp src/set_aliases.sh ~/.local/bin/ptSh_set_aliases # should this be added to PATH? it could be added to .bashrc instead
 	cp src/ptsh.sh ~/.local/bin/ptsh
 	cp LICENSE ~/.local/share/ptSh/LICENSE
 	cp src/logo.txt ~/.local/share/ptSh/logo.txt
@@ -17,3 +21,13 @@ install:
 	echo "Version: cloned from " | tee ~/.local/share/ptSh/version.txt
 	cat $(ver) | tee -a ~/.local/share/ptSh/version.txt
 	ptsh
+
+uninstall:
+	rm -rf ~/.local/share/ptSh
+	rm -rf ~/.config/ptSh
+	rm ~/.local/bin/ptSh_set_aliases
+	rm ~/.local/bin/ptsh
+	rm ~/.local/bin/ptls
+	rm ~/.local/bin/ptpwd
+	rm ~/.local/bin/ptmkdir
+	rm ~/.local/bin/pttouch
