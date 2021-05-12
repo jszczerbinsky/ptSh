@@ -64,14 +64,14 @@ while read -r line; do
     link=false
 
     if [[ ${words[0]} == "d"* ]]; then
-        filename="${DIR_PREFIX_ESCAPE_CODES}${DIR_PREFIX}\e[0m${DIR_NAME_ESCAPE_CODES}"
+        filename="${DIR_PREFIX_ESCAPE_CODES}${DIR_PREFIX}\x1B[0m${DIR_NAME_ESCAPE_CODES}"
         prefixLength=${#DIR_PREFIX}
     elif [[ ${words[0]} == "l"* ]];then
-        filename="${LINK_PREFIX_ESCAPE_CODES}${LINK_PREFIX}\e[0m${LINK_NAME_ESCAPE_CODES}"
+        filename="${LINK_PREFIX_ESCAPE_CODES}${LINK_PREFIX}\x1B[0m${LINK_NAME_ESCAPE_CODES}"
         prefixLength=${#LINK_PREFIX}
         link=true
     else
-        filename="${FILE_PREFIX_ESCAPE_CODES}${FILE_PREFIX}\e[0m${FILE_NAME_ESCAPE_CODES}"
+        filename="${FILE_PREFIX_ESCAPE_CODES}${FILE_PREFIX}\x1B[0m${FILE_NAME_ESCAPE_CODES}"
         prefixLength=${#FILE_PREFIX}
     fi
 
@@ -89,7 +89,7 @@ while read -r line; do
     
     nameLength=$((nameLength-1))
     filename="${filename::-1}"
-    filename="$filename\e[0m"
+    filename="$filename\x1B[0m"
     
     actualChar=$((nameLength+prefixLength))
     
