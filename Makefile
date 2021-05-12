@@ -15,12 +15,13 @@ install:
 	cp src/ptPwd.sh ~/.local/bin/ptpwd
 	cp src/ptMkdir.sh ~/.local/bin/ptmkdir
 	cp src/ptTouch.sh ~/.local/bin/pttouch
+	cp src/ptsh.sh ~/.local/bin/ptsh
 	mkdir -p ~/.config
 	mkdir -p ~/.config/ptSh
 	cp src/config ~/.config/ptSh/config
 	echo "Version: cloned from " | tee ~/.local/share/ptSh/version.txt
 	cat $(ver) | tee -a ~/.local/share/ptSh/version.txt
-	src/ptsh.sh
+	~/.local/bin/ptsh
 
 uninstall:
 	rm -rf ~/.local/share/ptSh
