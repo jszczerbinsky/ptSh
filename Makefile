@@ -7,6 +7,7 @@ install:
 	git rev-parse --short HEAD > $(ver)
 	mkdir -p ~/.local/share/ptSh
 	cp src/config ~/.local/share/ptSh/config
+	mkdir -p ~/.local/bin
 	cp src/set_aliases.sh ~/.local/bin/ptSh_set_aliases
 	cp src/ptsh.sh ~/.local/bin/ptsh
 	cp LICENSE ~/.local/share/ptSh/LICENSE
