@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source /usr/local/share/ptSh/config
+source ~/.local/share/ptSh/config
 test -f ~/.config/ptSh/config && source ~/.config/ptSh/config
 
 columnSize=0
