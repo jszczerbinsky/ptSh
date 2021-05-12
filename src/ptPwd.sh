@@ -8,8 +8,8 @@ function setval { printf -v "$1" "%s" "$(cat)"; declare -p "$1"; }
 eval "$(pwd $@ 2> >(setval err) > >(setval std) )"
 
 if [[ ! -z $err ]]; then
-    echo -ne "${ERROR_PREFIX_ESCAPE_CODES}${ERROR_PREFIX}\e[0m"
-    echo -e "${ERROR_MESSAGE_ESCAPE_CODES}$err\e[0m"
+    echo -ne "${ERROR_PREFIX_ESCAPE_CODES}${ERROR_PREFIX}\x1B[0m"
+    echo -e "${ERROR_MESSAGE_ESCAPE_CODES}$err\x1B[0m"
     exit
 fi
 
@@ -25,12 +25,12 @@ spaces=0
 function displayDir(){
 
     if $2; then
-        echo -ne "${PWD_LINE_ESCAPE_CODES}└ \e[0m"
+        echo -ne "${PWD_LINE_ESCAPE_CODES}└ \x1B[0m"
     fi
     if ((PWD_SHOW_DIR_PREFIX == 1)); then
-        echo -ne "${DIR_PREFIX_ESCAPE_CODES}${DIR_PREFIX}\e[0m"
+        echo -ne "${DIR_PREFIX_ESCAPE_CODES}${DIR_PREFIX}\x1B[0m"
     fi
-    echo -e "${DIR_NAME_ESCAPE_CODES}$1\e[0m"
+    echo -e "${DIR_NAME_ESCAPE_CODES}$1\x1B[0m"
 }
 
 displayDir "/" false

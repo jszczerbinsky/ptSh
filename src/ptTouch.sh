@@ -22,8 +22,8 @@ for val in "${words[@]}"; do
 done
 
 for name in "${names[@]}"; do
-    echo -ne "${FILE_PREFIX_ESCAPE_CODES}${FILE_PREFIX}\e[0m"
-    echo -e "${FILE_NAME_ESCAPE_CODES}$name\e[0m"
+    echo -ne "${FILE_PREFIX_ESCAPE_CODES}${FILE_PREFIX}\x1B[0m"
+    echo -e "${FILE_NAME_ESCAPE_CODES}$name\x1B[0m"
     echo -n "└"
 
     if [[ -z $args ]] && readlink -e $name >/dev/null; then
@@ -34,13 +34,13 @@ for name in "${names[@]}"; do
 
     while read -r line; do
         if [[ -z $line ]]; then
-            echo -ne "${SUCCESS_PREFIX_ESCAPE_CODES}${SUCCESS_PREFIX}\e[0m"
-            echo -e "${SUCCESS_MESSAGE_ESCAPE_CODES}${SUCCESS_MESSAGE}\e[0m"
+            echo -ne "${SUCCESS_PREFIX_ESCAPE_CODES}${SUCCESS_PREFIX}\x1B[0m"
+            echo -e "${SUCCESS_MESSAGE_ESCAPE_CODES}${SUCCESS_MESSAGE}\x1B[0m"
         else
-            echo -ne "${ERROR_PREFIX_ESCAPE_CODES}${ERROR_PREFIX}\e[0m"
+            echo -ne "${ERROR_PREFIX_ESCAPE_CODES}${ERROR_PREFIX}\x1B[0m"
             echo -ne "${ERROR_MESSAGE_ESCAPE_CODES}"
             echo -n "$(echo "$line" | sed "s/$1: //g" | sed 's/^[^:]*://g')"
-            echo -e "\e[0m"
+            echo -e "\x1B[0m"
         fi
     done <<< "$ERR"
 done
