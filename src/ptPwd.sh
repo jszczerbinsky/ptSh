@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-source /usr/local/share/ptSh/config
+source ~/.local/share/ptSh/config
 test -f ~/.config/ptSh/config && source ~/.config/ptSh/config
 
 function setval { printf -v "$1" "%s" "$(cat)"; declare -p "$1"; }
