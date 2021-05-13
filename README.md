@@ -19,12 +19,6 @@ You can customize ptSh scripts in many ways. Config file is in `/home/$USER/.con
 
 You need to install a font, that supports unicode special symbols, like [NerdFonts](https://github.com/ryanoasis/nerd-fonts).
 
-## Via [Rookie Package Manger](https://github.com/18fadly-anthony/rookie)
-
-```
-rookie.py --install ptSh
-```
-
 ### Automated installation
 
 Just download an installation script from [releases](https://github.com/jszczerbinsky/ptSh/releases) and run it.
