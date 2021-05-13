@@ -33,3 +33,4 @@ uninstall:
 	rm ~/.local/bin/ptmkdir
 	rm ~/.local/bin/pttouch
 	rm ~/.local/bin/ptcp
+	rm ~/.local/bin/ptsh
