@@ -13,6 +13,7 @@ Currently available scripts:
 | `ptmkdir`    | `mkdir`               | all                 |
 | `pttouch`    | `touch`               | all                 |
 | `ptcp`       | `cp`                  | all                 |
+| `ptrm`       | `rm`                  | all                 |
 
 You can customize ptSh scripts in many ways. Config file is in `/home/$USER/.config/ptSh/config`.
 
