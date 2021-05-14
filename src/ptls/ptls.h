@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 typedef struct Args_{
 
@@ -28,7 +29,6 @@ typedef struct Args_{
 
   //Sort
   bool reverse;
-  bool sName;
   bool sExtension;
   bool sTime;
 }Args;
@@ -38,5 +38,11 @@ typedef struct Files_{
   int count;
 }Files;
 
+typedef struct FileInstance_{
+  char* name;
+  struct stat* stats;
+}FileInstance;
+
 Args *parseArgs(int argc, char** argv);
 Files *getFiles();
+void sort(FileInstance **instances, Args* args, int low, int high);

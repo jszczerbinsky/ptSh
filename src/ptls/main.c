@@ -1,5 +1,4 @@
 #include <sys/ioctl.h>
-#include <sys/stat.h>
 #include <string.h>
 
 #include "ptls.h"
@@ -26,11 +25,8 @@ int main(int argc, char** argv)
 
   int fileCount = files->count - dirCount;
 
-  char** dirnames = calloc(dirCount, sizeof(char*) + 1);
-  struct stat **dirStats = (struct stat**)malloc(dirCount * sizeof(struct stat*));
-
-  char** filenames = calloc(fileCount, sizeof(char*) + 1);
-  struct stat **fileStats = (struct stat**)malloc(fileCount * sizeof(struct stat*));
+  FileInstance **dirInstances = (FileInstance**)malloc(dirCount * sizeof(FileInstance*));
+  FileInstance **fileInstances = (FileInstance**)malloc(fileCount * sizeof(FileInstance*));
 
   int actualDir = 0;
   
@@ -38,34 +34,39 @@ int main(int argc, char** argv)
   {
     if(!args->noDirsTop && S_ISDIR(stats[i]->st_mode))    
     {
-      dirnames[actualDir] = (char*)malloc(strlen(files->names[i])+1);
-      strcpy(dirnames[actualDir], files->names[i]);
-      dirStats[actualDir] = (struct stat*)malloc(sizeof(struct stat));
-      memcpy(dirStats[actualDir], stats[i], sizeof(struct stat));
+      dirInstances[actualDir] = (FileInstance*)malloc(sizeof(FileInstance));
+      dirInstances[actualDir]->name = malloc(strlen(files->names[i]) +1);
+      dirInstances[actualDir]->stats = (struct stat*)malloc(sizeof(struct stat));
+      strcpy(dirInstances[actualDir]->name, files->names[i]);
+      memcpy(dirInstances[actualDir]->stats, stats[i], sizeof(struct stat));
       actualDir++;
     }
     else
     {
-      filenames[i-actualDir] = (char*)malloc(strlen(files->names[i]) +1);
-      strcpy(filenames[i-actualDir], files->names[i]);
-      fileStats[i-actualDir] = (struct stat*)malloc(sizeof(struct stat));
-      memcpy(fileStats[i-actualDir], stats[i-actualDir], sizeof(struct stat));
+      fileInstances[i-actualDir] = (FileInstance*)malloc(sizeof(FileInstance));
+      fileInstances[i-actualDir]->name = (char*)malloc(strlen(files->names[i]) +1);
+      fileInstances[i-actualDir]->stats = (struct stat*)malloc(sizeof(struct stat));
+      strcpy(fileInstances[i-actualDir]->name, files->names[i]);
+      memcpy(fileInstances[i-actualDir]->stats, stats[i], sizeof(struct stat));
       
     }
   }
   free(stats);
   free(files);
 
+  sort(dirInstances, args, 0, dirCount-1);
+
   for(int i = 0; i < dirCount; i++)
-    printf("%s\n", dirnames[i]);
+    printf("%s\n", dirInstances[i]->name);
+
+  sort(fileInstances, args, 0, fileCount-1);
 
   for(int i = 0; i < fileCount; i++)
-    printf("%s\n", filenames[i]);
+    printf("%s\n", fileInstances[i]->name);
 
-  free(dirnames);
-  free(dirStats);
-  free(filenames);
-  free(fileStats);
+
+  free(dirInstances);
+  free(fileInstances);
 
   free(args);
 

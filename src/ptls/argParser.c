@@ -44,9 +44,6 @@ void getCharArgs(Args* args, char* str){
         i++;
         switch(str[i])
         {
-          case S_NAME_ARG:
-            args->sName = true;
-            break;
           case S_X_ARG:
             args->sExtension = true;
             break;
