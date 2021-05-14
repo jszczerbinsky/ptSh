@@ -12,39 +12,14 @@ Currently available scripts:
 | `ptpwd`      | `pwd`                 | all                 |
 | `ptmkdir`    | `mkdir`               | all                 |
 | `pttouch`    | `touch`               | all                 |
+| `ptcp`       | `cp`                  | all                 |
+| `ptrm`       | `rm`                  | all                 |
 
 You can customize ptSh scripts in many ways. Config file is in `/home/$USER/.config/ptSh/config`.
 
 ## Installation
 
-You need to install a font, that supports unicode special symbols, like [NerdFonts](https://github.com/ryanoasis/nerd-fonts).
-
-## Via [Rookie Package Manger](https://github.com/18fadly-anthony/rookie)
-
-```
-rookie.py --install ptSh
-```
-
-### Automated installation
-
-Just download an installation script from [releases](https://github.com/jszczerbinsky/ptSh/releases) and run it.
-
-### Manual installation
-
-Make sure `~/.local/bin` is in PATH
-
-Clone this repository and use `make` to install it.
-
-## Configuration
-
-If you want to use ptSh scripts by default you can set aliases in your `.bashrc` file.
-To automatically set all ptSh aliases, add this to your `.bashrc`:
-
-```shell
-source ptSh_set_aliases
-```
-
-You can configure colors, messages etc. in config file: `/home/$USER/.config/ptSh/config`
+You can find all installation and configuration steps on [Wiki](https://github.com/jszczerbinsky/ptSh/wiki)
 
 ## Screenshots
 

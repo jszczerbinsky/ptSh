@@ -15,6 +15,8 @@ install:
 	cp src/ptPwd.sh ~/.local/bin/ptpwd
 	cp src/ptMkdir.sh ~/.local/bin/ptmkdir
 	cp src/ptTouch.sh ~/.local/bin/pttouch
+	cp src/ptCp.sh ~/.local/bin/ptcp
+	cp src/ptRm.sh ~/.local/bin/ptrm
 	cp src/ptsh.sh ~/.local/bin/ptsh
 	mkdir -p ~/.config
 	mkdir -p ~/.config/ptSh
@@ -31,3 +33,6 @@ uninstall:
 	rm ~/.local/bin/ptpwd
 	rm ~/.local/bin/ptmkdir
 	rm ~/.local/bin/pttouch
+	rm ~/.local/bin/ptcp
+	rm ~/.local/bin/ptrm
+	rm ~/.local/bin/ptsh
