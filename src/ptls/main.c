@@ -3,6 +3,14 @@
 
 #include "ptls.h"
 
+bool fileVisible(FileInstance *file, Args *args)
+{
+    if((strcmp(file->name, ".") == 0 || strcmp(file->name, "..") == 0)  && !args->all) return false;
+    if(file->name[0] == '.' && !(args->all || args->almostAll)) return false;
+    if(file->name[strlen(file->name)-1] == '~' && args->ignoreBackups) return false;
+    return true;
+}
+
 int main(int argc, char** argv)
 {
   struct winsize w;
@@ -10,63 +18,55 @@ int main(int argc, char** argv)
 
   Args *args = parseArgs(argc, argv);
 
-  Files *files = getFiles();
-
-  struct stat **stats = (struct stat**)malloc(files->count * sizeof(struct stat*));
+  Files *allFiles = getFiles();
 
   int dirCount = 0;
+  int fileCount = 0;
 
-  for(int i = 0; i < files->count; i++)
+  for(int i = 0; i < allFiles->count; i++)
   {
-    stats[i] = (struct stat*)malloc(sizeof(struct stat));
-    stat(files->names[i], stats[i]);
-    if(!args->noDirsTop && S_ISDIR(stats[i]->st_mode)) dirCount++;
+    if(!fileVisible(allFiles->instances[i], args)) continue;
+    if(S_ISDIR(allFiles->instances[i]->stats->st_mode)) dirCount++;
+    else fileCount++;
+
   }
 
-  int fileCount = files->count - dirCount;
-
-  FileInstance **dirInstances = (FileInstance**)malloc(dirCount * sizeof(FileInstance*));
-  FileInstance **fileInstances = (FileInstance**)malloc(fileCount * sizeof(FileInstance*));
+  FileInstance **dirs= (FileInstance**)malloc(dirCount * sizeof(FileInstance*));
+  FileInstance **files= (FileInstance**)malloc(fileCount * sizeof(FileInstance*));
 
   int actualDir = 0;
+  int actualFile = 0;
   
-  for(int i = 0; i < files->count; i++)
+  for(int i = 0; i < allFiles->count; i++)
   {
-    if(!args->noDirsTop && S_ISDIR(stats[i]->st_mode))    
+    if(!fileVisible(allFiles->instances[i], args)) continue;
+
+    if(!args->noDirsTop && S_ISDIR(allFiles->instances[i]->stats->st_mode))    
     {
-      dirInstances[actualDir] = (FileInstance*)malloc(sizeof(FileInstance));
-      dirInstances[actualDir]->name = malloc(strlen(files->names[i]) +1);
-      dirInstances[actualDir]->stats = (struct stat*)malloc(sizeof(struct stat));
-      strcpy(dirInstances[actualDir]->name, files->names[i]);
-      memcpy(dirInstances[actualDir]->stats, stats[i], sizeof(struct stat));
+      dirs[actualDir] = allFiles->instances[i];
       actualDir++;
     }
     else
     {
-      fileInstances[i-actualDir] = (FileInstance*)malloc(sizeof(FileInstance));
-      fileInstances[i-actualDir]->name = (char*)malloc(strlen(files->names[i]) +1);
-      fileInstances[i-actualDir]->stats = (struct stat*)malloc(sizeof(struct stat));
-      strcpy(fileInstances[i-actualDir]->name, files->names[i]);
-      memcpy(fileInstances[i-actualDir]->stats, stats[i], sizeof(struct stat));
-      
+      files[actualFile] = allFiles->instances[i];
+      actualFile++;
     }
   }
-  free(stats);
-  free(files);
+  free(allFiles);
 
-  sort(dirInstances, args, 0, dirCount-1);
+  sort(dirs, args, 0, dirCount-1);
 
   for(int i = 0; i < dirCount; i++)
-    printf("%s\n", dirInstances[i]->name);
+    printf("%s\n", dirs[i]->name);
 
-  sort(fileInstances, args, 0, fileCount-1);
+  sort(files, args, 0, fileCount-1);
 
   for(int i = 0; i < fileCount; i++)
-    printf("%s\n", fileInstances[i]->name);
+    printf("%s\n", files[i]->name);
 
 
-  free(dirInstances);
-  free(fileInstances);
+  free(dirs);
+  free(files);
 
   free(args);
 

@@ -7,6 +7,7 @@ Files *getFiles()
   DIR *d;
   struct dirent *dir;
   Files *files = (Files*)malloc(sizeof(Files));
+  files->count = 0;
 
   d = opendir(".");
 
@@ -17,18 +18,20 @@ Files *getFiles()
     while (readdir(d) != NULL) filesCount++;
     seekdir(d, loc);
 
-    char **names = calloc(filesCount, sizeof(char*));
+    files->instances = (FileInstance**)calloc(filesCount, sizeof(FileInstance*));
 
-    int x = 0;
+    int i = 0;
     while ((dir = readdir(d)) != NULL)
     {
-      char* name = (char*)malloc(strlen(dir->d_name) +1);
-      strcpy(name, dir->d_name);
-      names[x] = name;
-      x++;
+      files->instances[i] = (FileInstance*)malloc(sizeof(FileInstance));
+      files->instances[i]->name = (char*)malloc(strlen(dir->d_name) +1);
+      files->instances[i]->stats = (struct stat*)malloc(sizeof(struct stat));
+
+      strcpy(files->instances[i]->name, dir->d_name);
+      stat(files->instances[i]->name, files->instances[i]->stats); 
+      i++;
     }
 
-    files->names = names;
     files->count = filesCount;
 
     closedir(d); 

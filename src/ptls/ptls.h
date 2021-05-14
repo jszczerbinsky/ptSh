@@ -33,15 +33,15 @@ typedef struct Args_{
   bool sTime;
 }Args;
 
-typedef struct Files_{
-  char** names;
-  int count;
-}Files;
-
 typedef struct FileInstance_{
   char* name;
   struct stat* stats;
 }FileInstance;
+
+typedef struct Files_{
+  FileInstance** instances;
+  int count;
+}Files;
 
 Args *parseArgs(int argc, char** argv);
 Files *getFiles();
