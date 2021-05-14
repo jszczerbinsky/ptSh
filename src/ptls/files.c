@@ -23,7 +23,7 @@ Files *getFiles()
     while ((dir = readdir(d)) != NULL)
     {
       char* name = (char*)malloc(strlen(dir->d_name) +1);
-      strcpy(dir->d_name, name);
+      strcpy(name, dir->d_name);
       names[x] = name;
       x++;
     }
