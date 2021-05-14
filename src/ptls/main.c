@@ -63,13 +63,15 @@ int main(int argc, char** argv)
   for(int i = 0; i < allFiles->count; i++)
   {
     if(!fileVisible(allFiles->instances[i], args)) continue;
-    if(S_ISDIR(allFiles->instances[i]->stats->st_mode)) dirCount++;
+    if(!args->noDirsTop && S_ISDIR(allFiles->instances[i]->stats->st_mode)) dirCount++;
     else fileCount++;
 
   }
 
-  FileInstance **dirs= (FileInstance**)malloc(dirCount * sizeof(FileInstance*));
-  FileInstance **files= (FileInstance**)malloc(fileCount * sizeof(FileInstance*));
+  FileInstance **dirs;
+  FileInstance **files;
+  if(dirCount > 0)dirs = (FileInstance**)malloc(dirCount * sizeof(FileInstance*));
+  if(fileCount >0)files= (FileInstance**)malloc(fileCount * sizeof(FileInstance*));
 
   int actualDir = 0;
   int actualFile = 0;
@@ -101,8 +103,8 @@ int main(int argc, char** argv)
   }
   free(allFiles);
 
-  sort(dirs, args, 0, dirCount-1);
-  sort(files, args, 0, fileCount-1);
+  if(dirCount > 1) sort(dirs, args, 0, dirCount-1);
+  if(fileCount >1) sort(files, args, 0, fileCount-1);
 
   int actualColumn = 0;
   int actualChar = 0;
@@ -122,8 +124,8 @@ int main(int argc, char** argv)
     free(files[i]->name);
     free(files[i]->stats);
   }
-  free(dirs);
-  free(files);
+  if(dirCount >0)free(dirs);
+  if(fileCount>0)free(files);
 
   free(args);
 
