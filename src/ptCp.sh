@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source ~/.local/share/ptSh/config
 test -f ~/.config/ptSh/config && source ~/.config/ptSh/config
