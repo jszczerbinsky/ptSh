@@ -38,6 +38,43 @@ void setPattern(char** destination, char* line, const char* pattern)
   *destination = calloc(1, (length+1) * sizeof(char)); 
   strncpy(*destination, ptr, length);
 
+  int escapeCodes = 0;
+  ptr = *destination;
+
+  for(int i = 0; i < strlen(*destination)-3; i++)
+  {
+    if(
+        *ptr == '\\' &&
+        *(ptr+1) == 'x' &&
+        *(ptr+2) == '1' &&
+        (*(ptr+3) == 'B' || *(ptr+3) == 'b'))
+      escapeCodes++;
+    ptr++;  
+  }
+  if(escapeCodes > 0)
+  {
+    int newLength = strlen(*destination) - 3*escapeCodes; 
+    char* buff = calloc(1, (newLength+1) * sizeof(char));
+    for(int i = 0; i < strlen(*destination); i++)
+    {
+      ptr = (*destination)+i;
+      if(
+          *ptr == '\\' &&
+          *(ptr+1) == 'x' &&
+          *(ptr+2) == '1' &&
+          (*(ptr+3) == 'B' || *(ptr+3) == 'b'))
+      {
+        strcat(buff, "\x1b");
+        i+=3;
+        continue;  
+      }
+      strncat(buff, ptr, 1);
+    }
+
+    free(*destination);
+    *destination = buff;
+  }
+
 }
 void parseLine(PtShConfig *config, char* line)
 {
@@ -129,4 +166,53 @@ void closeConfig(PtShConfig *config)
   free(config->successPrefixEscapeCodes);
   free(config->successMessageEscapeCodes);
   free(config);
+}
+
+
+char *getPrefix(PtShConfig *config, struct stat *stats)
+{
+  if(S_ISDIR(stats->st_mode))
+  {
+    if(config->dirPrefix != NULL) return config->dirPrefix;
+    else return "";
+  }
+  if(S_ISLNK(stats->st_mode))
+  {
+    if(config->linkPrefix != NULL) return config->linkPrefix;
+    else return "";
+  }
+  if(config->filePrefix != NULL) return config->filePrefix;
+  else return "";
+}
+char *getPrefixEscapeCodes(PtShConfig *config, struct stat *stats)
+{
+  if(S_ISDIR(stats->st_mode))
+  {
+    if(config->dirPrefixEscapeCodes != NULL) return config->dirPrefixEscapeCodes;
+    else return "";
+  }
+  if(S_ISLNK(stats->st_mode))
+  {
+    if(config->linkPrefixEscapeCodes != NULL) return config->linkPrefixEscapeCodes;
+    else return "";
+  }
+  if(config->filePrefixEscapeCodes != NULL) return config->filePrefixEscapeCodes;
+  else return "";
+
+}
+char *getNameEscapeCodes(PtShConfig *config, struct stat *stats)
+{
+  if(S_ISDIR(stats->st_mode))
+  {
+    if(config->dirPrefix != NULL) return config->dirPrefix;
+    else return "";
+  }
+  if(S_ISLNK(stats->st_mode))
+  {
+    if(config->linkPrefix != NULL) return config->linkPrefix;
+    else return "";
+  }
+  if(config->filePrefix != NULL) return config->filePrefix;
+  else return "";
+
 }

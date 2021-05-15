@@ -1,3 +1,5 @@
+#include <sys/stat.h>
+
 #ifndef PTSH_H
 #define PTSH_H
 
@@ -28,5 +30,9 @@ typedef struct PtShConfig_{
 
 PtShConfig *readConfig();
 void closeConfig(PtShConfig *config);
+
+char *getPrefix(PtShConfig *config, struct stat *stats);
+char *getPrefixEscapeCodes(PtShConfig *config, struct stat *stats);
+char *getNameEscapeCodes(PtShConfig *config, struct stat *stats);
 
 #endif

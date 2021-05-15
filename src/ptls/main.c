@@ -13,7 +13,7 @@ bool fileVisible(FileInstance *file, Args *args)
     return true;
 }
 
-void displayBlock(FileInstance **files, int count, Args* args, int longestName, int* actualColumn, int* actualChar)
+void displayBlock(FileInstance **files, int count, Args* args, PtShConfig *config, int longestName, int* actualColumn, int* actualChar)
 {
   if(longestName == 0) return;
   struct winsize w;
@@ -23,8 +23,11 @@ void displayBlock(FileInstance **files, int count, Args* args, int longestName, 
 
   for(int i = 0; i < count; i++)
   {
+    char* prefix = getPrefix(config, files[i]->stats);
+
+    printf("%s%s", getPrefixEscapeCodes(config, files[i]->stats), prefix);
     printf("%s", files[i]->name);
-    (*actualChar)+=strlen(files[i]->name);
+    (*actualChar)+=strlen(files[i]->name) + strlen(prefix);
     int spaces = longestName+1 - ((*actualChar)%(longestName+1));
     for(int x = 0; x < spaces; x++)
     {
@@ -41,15 +44,15 @@ void displayBlock(FileInstance **files, int count, Args* args, int longestName, 
   }
 }
 
-void displayList(FileInstance **files, int count, Args* args, int longestName)
+void displayList(FileInstance **files, int count, Args* args, PtShConfig *config, int longestName)
 {
 
 }
 
-void display(FileInstance **files, int count, Args* args, int longestName, int* actualColumn, int* actualChar)
+void display(FileInstance **files, int count, Args* args, PtShConfig *config,  int longestName, int* actualColumn, int* actualChar)
 {
-  if(args->l) displayList(files, count, args, longestName);
-  else displayBlock(files, count, args, longestName, actualColumn, actualChar);
+  if(args->l) displayList(files, count, args, config, longestName);
+  else displayBlock(files, count, args, config, longestName, actualColumn, actualChar);
 }
 
 int main(int argc, char** argv)
@@ -74,6 +77,7 @@ int main(int argc, char** argv)
   if(dirCount > 0)dirs = (FileInstance**)malloc(dirCount * sizeof(FileInstance*));
   if(fileCount >0)files= (FileInstance**)malloc(fileCount * sizeof(FileInstance*));
 
+  PtShConfig *config = readConfig();
   int actualDir = 0;
   int actualFile = 0;
 
@@ -89,6 +93,8 @@ int main(int argc, char** argv)
     }
 
     int nameLength = strlen(allFiles->instances[i]->name);
+    nameLength += strlen(getPrefix(config, allFiles->instances[i]->stats));
+
     if(nameLength > longestName) longestName = nameLength;
 
     if(!args->noDirsTop && S_ISDIR(allFiles->instances[i]->stats->st_mode))    
@@ -110,10 +116,10 @@ int main(int argc, char** argv)
   int actualColumn = 0;
   int actualChar = 0;
 
-  PtShConfig *config = readConfig();
+  display(dirs, dirCount, args, config, longestName, &actualColumn, &actualChar);
+  display(files, fileCount, args, config, longestName, &actualColumn, &actualChar);
 
-  display(dirs, dirCount, args, longestName, &actualColumn, &actualChar);
-  display(files, fileCount, args, longestName, &actualColumn, &actualChar);
+  closeConfig(config);
 
   printf("\n");
 
