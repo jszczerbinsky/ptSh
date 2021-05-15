@@ -1,5 +1,6 @@
 #include <dirent.h>
 #include <string.h>
+#include <sys/stat.h>
 #include "ptls.h"
 
 Files *getFiles()
@@ -26,9 +27,9 @@ Files *getFiles()
       files->instances[i] = (FileInstance*)malloc(sizeof(FileInstance));
       files->instances[i]->name = (char*)malloc(strlen(dir->d_name) +1);
       files->instances[i]->stats = (struct stat*)malloc(sizeof(struct stat));
-
+      
       strcpy(files->instances[i]->name, dir->d_name);
-      stat(files->instances[i]->name, files->instances[i]->stats); 
+      lstat(files->instances[i]->name, files->instances[i]->stats); 
       i++;
     }
 

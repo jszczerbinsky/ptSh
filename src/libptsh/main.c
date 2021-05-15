@@ -204,15 +204,15 @@ char *getNameEscapeCodes(PtShConfig *config, struct stat *stats)
 {
   if(S_ISDIR(stats->st_mode))
   {
-    if(config->dirPrefix != NULL) return config->dirPrefix;
+    if(config->dirNameEscapeCodes != NULL) return config->dirNameEscapeCodes;
     else return "";
   }
   if(S_ISLNK(stats->st_mode))
   {
-    if(config->linkPrefix != NULL) return config->linkPrefix;
+    if(config->linkNameEscapeCodes != NULL) return config->linkNameEscapeCodes;
     else return "";
   }
-  if(config->filePrefix != NULL) return config->filePrefix;
+  if(config->fileNameEscapeCodes != NULL) return config->fileNameEscapeCodes;
   else return "";
 
 }

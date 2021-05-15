@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <ptsh.h>
+
+#ifndef PTLS_H
+#define PTLS_H
 
 typedef struct Args_{
 
@@ -46,3 +50,6 @@ typedef struct Files_{
 Args *parseArgs(int argc, char** argv);
 Files *getFiles();
 void sort(FileInstance **instances, Args* args, int low, int high);
+void display(FileInstance **files, int count, Args* args, PtShConfig *config,  int longestName, int* actualColumn, int* actualChar);
+
+#endif
