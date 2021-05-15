@@ -1,6 +1,7 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <string.h>
+#include <pwd.h>
 
 #include "ptls.h"
 
@@ -30,6 +31,18 @@ void printPermissions(FileInstance *file, Args *args)
   permStr[10-noGroupDecrease] = (mode & S_IXOTH) ?  'x' : '-';
   
   printf("%s", &permStr[0]); 
+}
+
+void printUidGid(FileInstance *file, Args *args)
+{
+  struct passwd *user = getpwuid(file->stats->st_uid);
+  printf(" %s", user->pw_name);
+
+  if(!args->noGroup)
+  {
+    struct passwd *group = getpwuid(file->stats->st_gid);
+    printf(" %s", group->pw_name);
+  }
 }
 
 void displayBlock(FileInstance **files, int count, Args* args, PtShConfig *config, int longestName, int* actualColumn, int* actualChar)
@@ -78,6 +91,7 @@ void displayList(FileInstance **files, int count, Args* args, PtShConfig *config
     for(int x = 0; x < spaces; x++) printf(" ");
 
     printPermissions(files[i], args);
+    printUidGid(files[i], args);
     printf("\n");
   }
 }
