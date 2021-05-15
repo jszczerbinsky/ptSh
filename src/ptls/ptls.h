@@ -9,6 +9,9 @@
 
 typedef struct Args_{
 
+  //Path
+  char* dirPath;
+
   //Files
   bool all;
   bool almostAll;

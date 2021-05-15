@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 {
   Args *args = parseArgs(argc, argv);
 
-  Files *allFiles = getFiles();
+  Files *allFiles = getFiles(args);
 
   int dirCount = 0;
   int fileCount = 0;

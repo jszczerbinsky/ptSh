@@ -75,6 +75,7 @@ void getWordArg(Args *args, char* str)
 Args* parseArgs(int argc, char** argv)
 {
   Args *args = (Args*)calloc(1, sizeof(Args));
+  args->dirPath=".";
   
   if(argc == 1) return args;
 
@@ -83,6 +84,9 @@ Args* parseArgs(int argc, char** argv)
     if(argv[i][0] == '-'){
       if(argv[i][1] == '-') getWordArg(args, argv[i]);
       else getCharArgs(args, argv[i]);
+    }
+    else{
+      args->dirPath = argv[i];
     }
   }
 

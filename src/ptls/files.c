@@ -3,14 +3,14 @@
 #include <sys/stat.h>
 #include "ptls.h"
 
-Files *getFiles()
+Files *getFiles(Args *args)
 {
   DIR *d;
   struct dirent *dir;
   Files *files = (Files*)malloc(sizeof(Files));
   files->count = 0;
 
-  d = opendir(".");
+  d = opendir(args->dirPath);
 
   if(d)
   {
@@ -36,8 +36,8 @@ Files *getFiles()
     files->count = filesCount;
 
     closedir(d); 
+    free(dir);
   }
-  free(dir);
 
   return files;
 }
