@@ -1,6 +1,7 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <string.h>
+#include <ptsh.h>
 
 #include "ptls.h"
 
@@ -108,6 +109,8 @@ int main(int argc, char** argv)
 
   int actualColumn = 0;
   int actualChar = 0;
+
+  PtShConfig *config = readConfig();
 
   display(dirs, dirCount, args, longestName, &actualColumn, &actualChar);
   display(files, fileCount, args, longestName, &actualColumn, &actualChar);
