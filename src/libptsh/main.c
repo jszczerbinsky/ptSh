@@ -212,7 +212,7 @@ char *getNameEscapeCodes(PtShConfig *config, struct stat *stats)
     if(config->linkNameEscapeCodes != NULL) return config->linkNameEscapeCodes;
     else return "";
   }
-  if(config->fileNameEscapeCodes != NULL) return config->fileNameEscapeCodes;
+  if(config->fileNameEscapeCodes != NULL) return config->fileNamesEcapeCodes;
   else return "";
 
 }

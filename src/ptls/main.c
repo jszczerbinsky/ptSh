@@ -14,83 +14,60 @@ int main(int argc, char** argv)
 {
   Args *args = parseArgs(argc, argv);
 
-  Files *allFiles = getFiles(args);
+  Files *files = getFiles(args);
 
   int dirCount = 0;
-  int fileCount = 0;
+  int printSize = 0;
 
-  for(int i = 0; i < allFiles->count; i++)
+  for(int i = 0; i < files->count; i++)
   {
-    if(!fileVisible(allFiles->instances[i], args)) continue;
-    if(!args->noDirsTop && S_ISDIR(allFiles->instances[i]->stats->st_mode)) dirCount++;
-    else fileCount++;
-
+    if(fileVisible(files->instances[i], args))
+    {
+      printSize++;
+      if(S_ISDIR(files->instances[i]->stats->st_mode)) dirCount++;
+    }
   }
-
-  FileInstance **dirs;
-  FileInstance **files;
-  if(dirCount > 0)dirs = (FileInstance**)malloc(dirCount * sizeof(FileInstance*));
-  if(fileCount >0)files= (FileInstance**)malloc(fileCount * sizeof(FileInstance*));
 
   PtShConfig *config = readConfig();
-  int actualDir = 0;
-  int actualFile = 0;
 
-  int longestName = 0;
-  
-  for(int i = 0; i < allFiles->count; i++)
+  if(files->count >1) sort(files->instances, args, 0, files->count-1);
+
+  ColumnLengths *lengths = calloc(1, sizeof(ColumnLengths));
+  PrintFileData **printData = malloc(printSize * sizeof(PrintFileData*));
+
+  int x = 0;
+  for(int i = 0; i < printSize; i++)
   {
-    if(!fileVisible(allFiles->instances[i], args)){
-      free(allFiles->instances[i]->stats);
-      free(allFiles->instances[i]->name);
-      free(allFiles->instances[i]);
-      continue;
-    }
-
-    int nameLength = strlen(allFiles->instances[i]->name);
-    nameLength += strlen(getPrefix(config, allFiles->instances[i]->stats));
-
-    if(nameLength > longestName) longestName = nameLength;
-
-    if(!args->noDirsTop && S_ISDIR(allFiles->instances[i]->stats->st_mode))    
-    {
-      dirs[actualDir] = allFiles->instances[i];
-      actualDir++;
-    }
-    else
-    {
-      files[actualFile] = allFiles->instances[i];
-      actualFile++;
-    }
+    while(!fileVisible(files->instances[x], args)) x++;
+    printData[i] = calloc(1,sizeof(PrintFileData));
+    setPrintData(printData[i], files->instances[x], config, args, lengths); 
+    x++;
   }
-  free(allFiles);
 
-  if(dirCount > 1) sort(dirs, args, 0, dirCount-1);
-  if(fileCount >1) sort(files, args, 0, fileCount-1);
-
-  int actualColumn = 0;
-  int actualChar = 0;
-
-  display(dirs, dirCount, args, config, longestName, &actualColumn, &actualChar);
-  display(files, fileCount, args, config, longestName, &actualColumn, &actualChar);
+  display(printData, printSize,args, config, lengths); 
 
   closeConfig(config);
 
   printf("\n");
 
-  for(int i = 0; i < dirCount; i++)
+  free(lengths);
+  for(int i = 0; i < printSize; i++)
   {
-    free(dirs[i]->name);
-    free(dirs[i]->stats);
+    free(printData[i]->name);
+    free(printData[i]->permissions);
+    free(printData[i]->date);
+    free(printData[i]->time);
+    free(printData[i]->size);
+    free(printData[i]);
   }
-  for(int i = 0; i < fileCount; i++)
+  free(printData);
+  for(int i = 0; i < files->count; i++)
   {
-    free(files[i]->name);
-    free(files[i]->stats);
+    free(files->instances[i]->name);
+    free(files->instances[i]->stats);
+    free(files->instances[i]);
   }
-  if(dirCount >0)free(dirs);
-  if(fileCount>0)free(files);
-
+  free(files); 
   free(args);
 
   return 0;

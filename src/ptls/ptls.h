@@ -40,6 +40,29 @@ typedef struct Args_{
   bool sTime;
 }Args;
 
+typedef struct ColumnLengths_{
+  int name;
+  int uid;
+  int gid;
+  int inode;
+  int size;
+  int hardLinks;
+}ColumnLengths;
+
+typedef struct PrintFileData_{
+  int nameLength;
+  char *name;
+  char *permissions;
+  char *uid;
+  char *gid;
+  char *auhor;
+  char *date;
+  char *time;
+  int inode;
+  int hardlinks;
+  char *size;
+}PrintFileData;
+
 typedef struct FileInstance_{
   char* name;
   struct stat* stats;
@@ -53,6 +76,7 @@ typedef struct Files_{
 Args *parseArgs(int argc, char** argv);
 Files *getFiles();
 void sort(FileInstance **instances, Args* args, int low, int high);
-void display(FileInstance **files, int count, Args* args, PtShConfig *config,  int longestName, int* actualColumn, int* actualChar);
+void display(PrintFileData **files, int count, Args* args, PtShConfig *config, ColumnLengths *lengths);
+void setPrintData(PrintFileData *printData, FileInstance *instance, PtShConfig *config, Args *args, ColumnLengths *lengths);
 
 #endif

@@ -5,14 +5,14 @@
 
 #include "ptls.h"
 
-void printPermissions(FileInstance *file, Args *args)
+void setPermissions(PrintFileData *printData, FileInstance *file, Args *args)
 {
   short noGroupDecrease = 0;
 
   if(args->noGroup)
     noGroupDecrease = 4;
 
-  char permStr[12] = "";
+  char *permStr = calloc(12-noGroupDecrease, sizeof(char));
   __mode_t mode = file->stats->st_mode;
 
   permStr[0] = (mode & S_IRUSR) ?  'r' : '-';
@@ -30,23 +30,55 @@ void printPermissions(FileInstance *file, Args *args)
   permStr[9-noGroupDecrease] = (mode & S_IWOTH) ?  'w' : '-';
   permStr[10-noGroupDecrease] = (mode & S_IXOTH) ?  'x' : '-';
   
-  printf("%s", &permStr[0]); 
+  printData->permissions = permStr;
 }
 
-void printUidGid(FileInstance *file, Args *args)
+void setUidGid(PrintFileData *printData, FileInstance *file, Args *args, ColumnLengths *lengths)
 {
   struct passwd *user = getpwuid(file->stats->st_uid);
-  printf(" %s", user->pw_name);
+  printData->uid = calloc(strlen(user->pw_name) +1,  sizeof(char));
+  strcpy(printData->uid, user->pw_name);
+  if(strlen(printData->uid) > lengths->uid) lengths->uid = strlen(printData->uid); 
 
   if(!args->noGroup)
   {
     struct passwd *group = getpwuid(file->stats->st_gid);
-    printf(" %s", group->pw_name);
+    printData->gid = calloc(strlen(group->pw_name) +1, sizeof(char));
+    strcpy(printData->gid, group->pw_name);
   }
 }
 
-void displayBlock(FileInstance **files, int count, Args* args, PtShConfig *config, int longestName, int* actualColumn, int* actualChar)
+void setPrintData(PrintFileData *printData, FileInstance *instance, PtShConfig *config, Args *args, ColumnLengths *lengths)
 {
+  char* prefixEC = getPrefixEscapeCodes(config, instance->stats);
+  char* prefix = getPrefix(config, instance->stats);
+  char* nameEC = getNameEscapeCodes(config, instance->stats);
+  
+  int nameLength = strlen(prefix) + strlen(instance->name);
+  printData->nameLength = nameLength;
+  if(nameLength > lengths->name) lengths->name = nameLength;
+
+  nameLength += strlen(prefixEC) + strlen(nameEC) + strlen("\x1b[0m")*2;
+
+  printData->name = calloc(nameLength+1, sizeof(char));
+  strcpy(printData->name, prefixEC);
+  strcat(printData->name, prefix);
+  strcat(printData->name, "\x1b[0m");
+  strcat(printData->name, nameEC);
+  strcat(printData->name, instance->name);
+  strcat(printData->name, "\x1b[0m");
+
+  if(!args->l) return;
+  setPermissions(printData, instance, args);
+  setUidGid(printData, instance, args, lengths);
+}
+
+void displayBlock(PrintFileData **printData, int count, ColumnLengths *lengths, Args* args, PtShConfig *config)
+{
+  int longestName = lengths->name;
+  int actualChar = 0;
+  int actualColumn = 0;
+
   if(longestName == 0) return;
   struct winsize w;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
@@ -55,51 +87,49 @@ void displayBlock(FileInstance **files, int count, Args* args, PtShConfig *confi
 
   for(int i = 0; i < count; i++)
   {
-    char* prefix = getPrefix(config, files[i]->stats);
-
-    printf("%s%s\x1b[0m", getPrefixEscapeCodes(config, files[i]->stats), prefix);
-    printf("%s%s\x1b[0m", getNameEscapeCodes(config, files[i]->stats), files[i]->name);
-    (*actualChar)+=strlen(files[i]->name) + strlen(prefix);
-    int spaces = longestName+1 - ((*actualChar)%(longestName+1));
+    printf("%s", printData[i]->name);
+    actualChar+=printData[i]->nameLength;
+    int spaces = longestName+1 - (actualChar%(longestName+1));
     for(int x = 0; x < spaces; x++)
     {
       printf(" ");
-      (*actualChar)++;
+      actualChar++;
     }
-    (*actualColumn)++;
-    if((*actualColumn) >= columns)
+    actualColumn++;
+    if(actualColumn >= columns)
     {
       printf("\n");
-      (*actualChar) = 0;
-      (*actualColumn) = 0;
+      actualChar = 0;
+      actualColumn = 0;
     }
   }
 }
 
-void displayList(FileInstance **files, int count, Args* args, PtShConfig *config, int longestName)
+void displayList(PrintFileData **files, int count, ColumnLengths *lengths, Args* args, PtShConfig *config)
 {
   for(int i = 0; i < count; i++)
   {
-    char* prefix = getPrefix(config, files[i]->stats);
-    char* prefixEC = getPrefixEscapeCodes(config, files[i]->stats);
-    char* nameEC = getNameEscapeCodes(config, files[i]->stats);
+    printf("%s", files[i]->name);
 
-    printf("%s%s\x1b[0m", prefixEC, prefix);
-    printf("%s%s\x1b[0m", nameEC, files[i]->name);
-
-    int spaces = longestName+1 - (strlen(prefix)+strlen(files[i]->name));
+    int spaces = lengths->name+1 - files[i]->nameLength;
     for(int x = 0; x < spaces; x++) printf(" ");
 
-    printPermissions(files[i], args);
-    printUidGid(files[i], args);
+    printf("%s %s", files[i]->permissions, files[i]->uid);
+
+    spaces = lengths->uid+1 - strlen(files[i]->uid);
+    for(int x = 0; x < spaces; x++) printf(" ");
+
+    if(!args->noGroup)
+      printf("%s", files[i]->gid);
+
     printf("\n");
   }
 }
 
-void display(FileInstance **files, int count, Args* args, PtShConfig *config,  int longestName, int* actualColumn, int* actualChar)
+void display(PrintFileData **files, int count, Args* args, PtShConfig *config, ColumnLengths *lengths)
 {
-  if(args->l) displayList(files, count, args, config, longestName);
-  else displayBlock(files, count, args, config, longestName, actualColumn, actualChar);
+  if(args->l) displayList(files, count, lengths, args, config);
+  else displayBlock(files, count, lengths, args, config); 
 }
 
 
