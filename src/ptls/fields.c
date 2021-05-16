@@ -2,6 +2,7 @@
 #include <pwd.h>
 #include <grp.h>
 #include <time.h>
+#include <math.h>
 
 #include "ptls.h"
 
@@ -53,18 +54,43 @@ void setPermissions(Fields *fields, File *file, Args *args)
 
 void setUidGid(Fields *fields, File *file, Args *args, ColumnSizes *cSize)
 {
-  struct passwd *user = getpwuid(file->stats->st_uid);
+  if(args->numericUidGid)
+  {
+    int digits = 1;
+    if(file->stats->st_uid > 0)
+      digits = log10(file->stats->st_uid)+1;
 
-  fields->uid = calloc(strlen(user->pw_name) +1,  sizeof(char));
-  strcpy(fields->uid, user->pw_name);
-  if(strlen(fields->uid) > cSize->uid) cSize->uid = strlen(fields->uid); 
+    fields->uid = calloc(digits+1, sizeof(char));
+    sprintf(fields->uid, "%d", file->stats->st_uid);
+    if(digits > cSize->uid) cSize->uid = digits;
+  
+  }else
+  {
+    struct passwd *user = getpwuid(file->stats->st_uid);
 
+    fields->uid = calloc(strlen(user->pw_name) +1,  sizeof(char));
+    strcpy(fields->uid, user->pw_name);
+    if(strlen(fields->uid) > cSize->uid) cSize->uid = strlen(fields->uid); 
+  }
   if(!args->noGroup)
   {
-    struct group *group = getgrgid(file->stats->st_gid);
-    fields->gid = calloc(strlen(group->gr_name) +1, sizeof(char));
-    strcpy(fields->gid, group->gr_name);
-    if(strlen(fields->gid) > cSize->gid) cSize->gid = strlen(fields->gid); 
+    if(args->numericUidGid)
+    {
+      int digits = 1;
+      if(file->stats->st_gid > 0)
+        digits = log10(file->stats->st_gid)+1;
+
+      fields->gid = calloc(digits+1, sizeof(char));
+      sprintf(fields->gid, "%d", file->stats->st_gid);
+    if(digits > cSize->gid) cSize->gid = digits;
+
+    }else
+    {
+      struct group *group = getgrgid(file->stats->st_gid);
+      fields->gid = calloc(strlen(group->gr_name) +1, sizeof(char));
+      strcpy(fields->gid, group->gr_name);
+      if(strlen(fields->gid) > cSize->gid) cSize->gid = strlen(fields->gid); 
+    }
   }
 }
 
