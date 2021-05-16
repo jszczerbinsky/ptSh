@@ -2,7 +2,7 @@
 
 #include "ptls.h"
 
-bool fileVisible(FileInstance *file, Args *args)
+bool fileVisible(File *file, Args *args)
 {
     if((strcmp(file->name, ".") == 0 || strcmp(file->name, "..") == 0)  && !args->all) return false;
     if(file->name[0] == '.' && !(args->all || args->almostAll)) return false;
@@ -14,60 +14,47 @@ int main(int argc, char** argv)
 {
   Args *args = parseArgs(argc, argv);
 
-  Files *files = getFiles(args);
+  DirContent *dirContent = getFiles(args);
 
   int dirCount = 0;
   int printSize = 0;
 
-  for(int i = 0; i < files->count; i++)
+  for(int i = 0; i < dirContent->fileCount; i++)
   {
-    if(fileVisible(files->instances[i], args))
+    if(fileVisible(dirContent->files[i], args))
     {
       printSize++;
-      if(S_ISDIR(files->instances[i]->stats->st_mode)) dirCount++;
+      if(S_ISDIR(dirContent->files[i]->stats->st_mode)) dirCount++;
     }
   }
 
   PtShConfig *config = readConfig();
 
-  if(files->count >1) sort(files->instances, args, 0, files->count-1);
+  if(dirContent->fileCount >1) sort(dirContent->files, args, 0, dirContent->fileCount-1);
 
-  ColumnLengths *lengths = calloc(1, sizeof(ColumnLengths));
-  PrintFileData **printData = malloc(printSize * sizeof(PrintFileData*));
+  ColumnSizes *columnSizes= calloc(1, sizeof(ColumnSizes));
+  Fields **fields = malloc(printSize * sizeof(Fields*));
 
   int x = 0;
   for(int i = 0; i < printSize; i++)
   {
-    while(!fileVisible(files->instances[x], args)) x++;
-    printData[i] = calloc(1,sizeof(PrintFileData));
-    setPrintData(printData[i], files->instances[x], config, args, lengths); 
+    while(!fileVisible(dirContent->files[x], args)) x++;
+    fields[i] = calloc(1,sizeof(Fields));
+    fillFields(fields[i], dirContent->files[x], config, args, columnSizes); 
     x++;
   }
 
-  display(printData, printSize,args, config, lengths); 
+  display(fields, printSize,args, config, columnSizes); 
 
   closeConfig(config);
 
   printf("\n");
 
-  free(lengths);
+  free(columnSizes);
   for(int i = 0; i < printSize; i++)
-  {
-    free(printData[i]->name);
-    free(printData[i]->permissions);
-    free(printData[i]->date);
-    free(printData[i]->time);
-    free(printData[i]->size);
-    free(printData[i]);
-  }
-  free(printData);
-  for(int i = 0; i < files->count; i++)
-  {
-    free(files->instances[i]->name);
-    free(files->instances[i]->stats);
-    free(files->instances[i]);
-  }
-  free(files); 
+    freeFields(fields[i]);
+  free(fields);
+  freeContent(dirContent);
   free(args);
 
   return 0;

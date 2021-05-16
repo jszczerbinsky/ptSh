@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include "ptls.h"
 
-bool checkSmaller(FileInstance* a, FileInstance* b, Args* args)
+bool checkSmaller(File *a, File *b, Args* args)
 {
     if(args->sExtension)
     {
@@ -35,37 +35,37 @@ bool checkSmaller(FileInstance* a, FileInstance* b, Args* args)
     return strcmp(a->name, b->name) < 0;
 }
 
-void swap(FileInstance* a, FileInstance* b)
+void swap(File *a, File *b)
 {
-    FileInstance tmp = *a;
+    File tmp = *a;
     *a = *b;
     *b = tmp;
 }
  
-int partition (FileInstance **instances, Args* args, int low, int high)
+int partition (File **file, Args* args, int low, int high)
 {
-    FileInstance* pivot = instances[high];
+    File *pivot = file[high];
     int i = (low - 1);  
  
     for (int j = low; j <= high- 1; j++)
     {
-        if (checkSmaller(instances[j], pivot, args))
+        if (checkSmaller(file[j], pivot, args))
         {
             i++;
-            swap(instances[i], instances[j]);
+            swap(file[i], file[j]);
         }
     }
-    swap(instances[i + 1], instances[high]);
+    swap(file[i + 1], file[high]);
     return (i + 1);
 }
  
-void sort(FileInstance **instances, Args* args, int low, int high)
+void sort(File **file, Args* args, int low, int high)
 {
     if (low < high)
     {
-        int pi = partition(instances, args, low, high);
+        int pi = partition(file, args, low, high);
  
-        sort(instances, args, low, pi - 1);
-        sort(instances, args, pi + 1, high);
+        sort(file, args, low, pi - 1);
+        sort(file, args, pi + 1, high);
     }
 }

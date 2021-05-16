@@ -3,12 +3,12 @@
 #include <sys/stat.h>
 #include "ptls.h"
 
-Files *getFiles(Args *args)
+DirContent *getFiles(Args *args)
 {
   DIR *d;
   struct dirent *dir;
-  Files *files = (Files*)malloc(sizeof(Files));
-  files->count = 0;
+  DirContent *content= (DirContent*)malloc(sizeof(DirContent));
+  content->fileCount = 0;
 
   d = opendir(args->dirPath);
 
@@ -19,25 +19,36 @@ Files *getFiles(Args *args)
     while (readdir(d) != NULL) filesCount++;
     seekdir(d, loc);
 
-    files->instances = (FileInstance**)calloc(filesCount, sizeof(FileInstance*));
+    content->files = (File**)calloc(filesCount, sizeof(File*));
 
     int i = 0;
     while ((dir = readdir(d)) != NULL)
     {
-      files->instances[i] = (FileInstance*)malloc(sizeof(FileInstance));
-      files->instances[i]->name = (char*)malloc(strlen(dir->d_name) +1);
-      files->instances[i]->stats = (struct stat*)malloc(sizeof(struct stat));
+      content->files[i] = (File*)malloc(sizeof(File));
+      content->files[i]->name = (char*)malloc(strlen(dir->d_name) +1);
+      content->files[i]->stats = (struct stat*)malloc(sizeof(struct stat));
       
-      strcpy(files->instances[i]->name, dir->d_name);
-      lstat(files->instances[i]->name, files->instances[i]->stats); 
+      strcpy(content->files[i]->name, dir->d_name);
+      lstat(content->files[i]->name, content->files[i]->stats); 
       i++;
     }
 
-    files->count = filesCount;
+    content->fileCount = filesCount;
 
     closedir(d); 
     free(dir);
   }
 
-  return files;
+  return content;
+}
+
+void freeContent(DirContent *dirContent)
+{
+  for(int i = 0; i < dirContent->fileCount; i++)
+  {
+    free(dirContent->files[i]->name);
+    free(dirContent->files[i]->stats);
+    free(dirContent->files[i]);
+  }
+  free(dirContent); 
 }
