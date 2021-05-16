@@ -2,6 +2,27 @@
 
 #include "ptls.h"
 
+void groupDirs(DirContent *dirContent, int dirCount)
+{
+  int currentPos = 0;
+  while(currentPos < dirCount)
+  {
+    if(!S_ISDIR(dirContent->files[currentPos]->stats->st_mode))
+    {
+      for(int i = currentPos+1; i < dirContent->fileCount; i++)
+      {
+        if(S_ISDIR(dirContent->files[i]->stats->st_mode))
+        {
+          File *tmp = dirContent->files[currentPos];
+          dirContent->files[currentPos] = dirContent->files[i];
+          dirContent->files[i] = tmp;
+        }
+      } 
+    }
+    currentPos++;
+  }
+}
+
 bool fileVisible(File *file, Args *args)
 {
     if((strcmp(file->name, ".") == 0 || strcmp(file->name, "..") == 0)  && !args->all) return false;
@@ -30,7 +51,17 @@ int main(int argc, char** argv)
 
   PtShConfig *config = readConfig();
 
-  if(dirContent->fileCount >1) sort(dirContent->files, args, 0, dirContent->fileCount-1);
+  if(dirContent->fileCount >1)
+  {
+    if(args->noDirsTop)
+      sort(dirContent->files, args, 0, dirContent->fileCount-1);
+    else
+    {
+      groupDirs(dirContent, dirCount);
+      sort(dirContent->files, args, 0, dirCount-1);
+      sort(dirContent->files, args, dirCount, dirContent->fileCount-1);
+    }
+  }
 
   ColumnSizes *columnSizes= calloc(1, sizeof(ColumnSizes));
   Fields **fields = malloc(printSize * sizeof(Fields*));
