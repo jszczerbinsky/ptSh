@@ -1,3 +1,6 @@
+#ifndef PTLS_ARG_DEFS
+#define PTLS_ARG_DEFS
+
 #define ALL_ARG               'a'
 #define ALMOST_ALL_ARG        'A'
 #define IGNORE_BACKUPS_ARG    'B'
@@ -26,3 +29,5 @@
 #define NUMERIC_UID_GID_ARG_W "--numeric-uid-gid"
 #define NO_DIRS_TOP_ARG_W     "--no-dirs-top"
 #define REVERSE_ARG_W         "--reverse"
+
+#endif
