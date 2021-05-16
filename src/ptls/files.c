@@ -1,6 +1,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <linux/limits.h>
 #include "ptls.h"
 
 DirContent *getFiles(Args *args)
@@ -27,9 +28,19 @@ DirContent *getFiles(Args *args)
       content->files[i] = (File*)malloc(sizeof(File));
       content->files[i]->name = (char*)malloc(strlen(dir->d_name) +1);
       content->files[i]->stats = (struct stat*)malloc(sizeof(struct stat));
+
+      char buff[PATH_MAX+1];
+      realpath(args->dirPath, buff);
+
+      char *path = calloc(PATH_MAX+1, sizeof(char));
+      strcpy(path, &(buff[0]));
+      strcat(path, "/");
+      strcat(path, dir->d_name);
       
       strcpy(content->files[i]->name, dir->d_name);
-      lstat(content->files[i]->name, content->files[i]->stats); 
+      lstat(path, content->files[i]->stats); 
+
+      free(path);
       i++;
     }
 

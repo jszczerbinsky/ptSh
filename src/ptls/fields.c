@@ -1,5 +1,6 @@
 #include <string.h>
 #include <pwd.h>
+#include <grp.h>
 #include <time.h>
 
 #include "ptls.h"
@@ -53,15 +54,16 @@ void setPermissions(Fields *fields, File *file, Args *args)
 void setUidGid(Fields *fields, File *file, Args *args, ColumnSizes *cSize)
 {
   struct passwd *user = getpwuid(file->stats->st_uid);
+
   fields->uid = calloc(strlen(user->pw_name) +1,  sizeof(char));
   strcpy(fields->uid, user->pw_name);
   if(strlen(fields->uid) > cSize->uid) cSize->uid = strlen(fields->uid); 
 
   if(!args->noGroup)
   {
-    struct passwd *group = getpwuid(file->stats->st_gid);
-    fields->gid = calloc(strlen(group->pw_name) +1, sizeof(char));
-    strcpy(fields->gid, group->pw_name);
+    struct group *group = getgrgid(file->stats->st_gid);
+    fields->gid = calloc(strlen(group->gr_name) +1, sizeof(char));
+    strcpy(fields->gid, group->gr_name);
     if(strlen(fields->gid) > cSize->gid) cSize->gid = strlen(fields->gid); 
   }
 }
