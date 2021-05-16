@@ -7,6 +7,7 @@
 #define L_ARG                 'l'
 #define INODE_ARG             'i'
 #define NO_GROUP_ARG          'G'
+#define TIME_ARG              't'
 #define FULL_TIME_ARG         'T'
 #define FULL_SIZE_ARG         'S'
 #define DECIMAL_SIZE_ARG      'D'

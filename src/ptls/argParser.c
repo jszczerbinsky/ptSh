@@ -25,6 +25,9 @@ void getCharArgs(Args* args, char* str){
       case NO_GROUP_ARG:
         args->noGroup = true;
         break;
+      case TIME_ARG:
+        args->time = true;
+        break;
       case FULL_TIME_ARG:
         args->fullTime = true;
         break;

@@ -13,6 +13,7 @@ typedef struct Args_{
   bool all;
   bool almostAll;
   bool ignoreBackups;
+  bool time;
 
   //List
   bool l;

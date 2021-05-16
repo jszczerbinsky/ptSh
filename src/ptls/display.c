@@ -37,22 +37,29 @@ void displayBlock(Fields **fields, int count, ColumnSizes *cSize, Args* args, Pt
   }
 }
 
+void printField(char* str, int length, int columnSize)
+{
+    printf("%s ", str);
+
+    int spaces = columnSize - length;
+    for(int x = 0; x < spaces; x++) printf(" ");
+}
+
 void displayList(Fields **fields, int count, ColumnSizes *cSize, Args* args, PtShConfig *config)
 {
   for(int i = 0; i < count; i++)
   {
-    printf("%s", fields[i]->name);
-
-    int spaces = cSize->name+1 - fields[i]->nameLength;
-    for(int x = 0; x < spaces; x++) printf(" ");
-
-    printf("%s %s", fields[i]->permissions, fields[i]->uid);
-
-    spaces = cSize->uid+1 - strlen(fields[i]->uid);
-    for(int x = 0; x < spaces; x++) printf(" ");
+    printField(fields[i]->name, fields[i]->nameLength, cSize->name);
+    printField(fields[i]->permissions, 0, 0);
+    printField(fields[i]->uid, strlen(fields[i]->uid), cSize->uid);
 
     if(!args->noGroup)
-      printf("%s", fields[i]->gid);
+      printField(fields[i]->gid, strlen(fields[i]->gid), cSize->gid);
+
+    printField(fields[i]->date, 0, 0);
+
+    if(args->fullTime || args->time)
+      printField(fields[i]->time, 0,0);
 
     printf("\n");
   }

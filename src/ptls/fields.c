@@ -1,7 +1,26 @@
 #include <string.h>
 #include <pwd.h>
+#include <time.h>
 
 #include "ptls.h"
+
+void setDateTime(Fields *fields, File *file, Args *args)
+{
+  time_t *time = &(file->stats->st_ctime);
+
+  fields->date = calloc(13, sizeof(char));
+  strftime(fields->date, 12, "%Y-%m-%d", localtime(time));
+
+  if(!args->fullTime && !args->time) return;
+
+  fields->time= calloc(13, sizeof(char));
+
+  if(args->fullTime)
+    strftime(fields->time, 12, "%H:%M:%S", localtime(time));
+  else if(args->time)
+    strftime(fields->time, 12, "%H:%M", localtime(time));
+
+}
 
 void setPermissions(Fields *fields, File *file, Args *args)
 {
@@ -43,6 +62,7 @@ void setUidGid(Fields *fields, File *file, Args *args, ColumnSizes *cSize)
     struct passwd *group = getpwuid(file->stats->st_gid);
     fields->gid = calloc(strlen(group->pw_name) +1, sizeof(char));
     strcpy(fields->gid, group->pw_name);
+    if(strlen(fields->gid) > cSize->gid) cSize->gid = strlen(fields->gid); 
   }
 }
 
@@ -69,6 +89,7 @@ void fillFields(Fields *fields, File *file, PtShConfig *config, Args *args, Colu
   if(!args->l) return;
   setPermissions(fields, file, args);
   setUidGid(fields, file, args, cSize);
+  setDateTime(fields, file, args);
 }
 
 void freeFields(Fields *fields)
