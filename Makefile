@@ -6,12 +6,15 @@ all:
 install:
 	git rev-parse --short HEAD > $(ver)
 	mkdir -p ~/.local/share/ptSh
-	cp src/config ~/.local/share/ptSh/config
+	mkdir -p ~/.local/share/ptSh/include
+	mkdir -p ~/.local/share/ptSh/lib
 	mkdir -p ~/.local/bin
+	make -C src/libptsh
+	make -C src/ptls
+	cp src/config ~/.local/share/ptSh/config
 	cp src/set_aliases.sh ~/.local/bin/ptSh_set_aliases
 	cp LICENSE ~/.local/share/ptSh/LICENSE
 	cp src/logo.txt ~/.local/share/ptSh/logo.txt
-	cp src/ptLs.sh ~/.local/bin/ptls
 	cp src/ptPwd.sh ~/.local/bin/ptpwd
 	cp src/ptMkdir.sh ~/.local/bin/ptmkdir
 	cp src/ptTouch.sh ~/.local/bin/pttouch
@@ -24,6 +27,7 @@ install:
 	echo "Version: cloned from " | tee ~/.local/share/ptSh/version.txt
 	cat $(ver) | tee -a ~/.local/share/ptSh/version.txt
 	~/.local/bin/ptsh
+
 
 uninstall:
 	rm -rf ~/.local/share/ptSh
