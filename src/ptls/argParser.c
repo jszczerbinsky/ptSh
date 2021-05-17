@@ -61,7 +61,8 @@ void getCharArgs(Args* args, char* str){
 
 void getWordArg(Args *args, char* str)
 {
-  if(strcmp(str, ALL_ARG_W) == 0) args->all = true;
+  if(strcmp(str, HELP_ARG_W) == 0) args->help = true;
+  else if(strcmp(str, ALL_ARG_W) == 0) args->all = true;
   else if(strcmp(str, ALMOST_ALL_ARG_W) == 0) args->almostAll = true;
   else if(strcmp(str, IGNORE_BACKUPS_ARG_W) == 0) args->ignoreBackups = true;
   else if(strcmp(str, INODE_ARG_W) == 0) args->inode = true;

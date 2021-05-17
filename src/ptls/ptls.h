@@ -23,5 +23,6 @@ void sort(File **file, Args* args, int low, int high);
 
 //display.c
 void display(Fields **files, int count, Args* args, PtShConfig *config, ColumnSizes *sizes);
+void displayHelp();
 
 #endif

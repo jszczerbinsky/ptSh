@@ -6,6 +6,9 @@
 
 typedef struct Args_{
 
+  //Help
+  bool help;
+
   //Path
   char* dirPath;
 

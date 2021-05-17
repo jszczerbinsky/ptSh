@@ -35,6 +35,13 @@ int main(int argc, char** argv)
 {
   Args *args = parseArgs(argc, argv);
 
+  if(args->help)
+  {
+    displayHelp();
+    free(args);
+    return 0;
+  }
+
   DirContent *dirContent = getFiles(args);
 
   int dirCount = 0;
