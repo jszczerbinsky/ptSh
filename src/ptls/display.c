@@ -50,6 +50,10 @@ void displayList(Fields **fields, int count, ColumnSizes *cSize, Args* args, PtS
   for(int i = 0; i < count; i++)
   {
     printField(fields[i]->name, fields[i]->nameLength, cSize->name);
+
+    if(args->inode)
+      printField(fields[i]->inode, strlen(fields[i]->inode), cSize->inode);
+
     printField(fields[i]->permissions, 0, 0);
     printField(fields[i]->uid, strlen(fields[i]->uid), cSize->uid);
 
@@ -60,6 +64,10 @@ void displayList(Fields **fields, int count, ColumnSizes *cSize, Args* args, PtS
 
     if(args->fullTime || args->time)
       printField(fields[i]->time, 0,0);
+
+    printField(fields[i]->hardlinks, strlen(fields[i]->hardlinks), cSize->hardlinks);
+
+    printField(fields[i]->size, strlen(fields[i]->size), cSize->size);
 
     printf("\n");
   }

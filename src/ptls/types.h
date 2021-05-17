@@ -44,7 +44,7 @@ typedef struct ColumnSizes_{
   int gid;
   int inode;
   int size;
-  int hardLinks;
+  int hardlinks;
 }ColumnSizes;
 
 typedef struct Fields_{
@@ -53,11 +53,10 @@ typedef struct Fields_{
   char *permissions;
   char *uid;
   char *gid;
-  char *auhor;
   char *date;
   char *time;
-  int inode;
-  int hardlinks;
+  char *inode;
+  char *hardlinks;
   char *size;
 }Fields;
 

@@ -26,13 +26,16 @@ bool checkSmaller(File *a, File *b, Args* args)
                 pb--; 
             }
         }
-        return strcmp(pa, pb) < 0;
+        int result = strcmp(pa, pb);
+        return (args->reverse) ? result > 0 : result < 0;
     }
     else if (args->sTime)
     {
-        return a->stats->st_ctime - b->stats->st_ctime > 0;
+        int result = a->stats->st_ctime - b->stats->st_ctime;
+        return (args->reverse) ? result < 0 : result > 0;
     }
-    return strcmp(a->name, b->name) < 0;
+    int result = strcmp(a->name, b->name);
+    return (args->reverse) ? result > 0 : result < 0;
 }
 
 void swap(File *a, File *b)

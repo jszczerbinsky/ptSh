@@ -6,6 +6,67 @@
 
 #include "ptls.h"
 
+int getIntDigits(int i)
+{
+  if(i == 0) return 1;
+  else return log10(i)+1;
+}
+
+void setSize(Fields *fields, File *file, Args *args, ColumnSizes *cSize)
+{
+  int precission = 1;
+
+  float size = file->stats->st_size;
+  int divider = (args->decimalSize) ? 1000 : 1024;
+  char *unit = "B";
+
+  if(!args->fullSize)
+  {
+    if(size > divider)
+    {
+      size /= divider;
+      unit = (args->decimalSize) ? "KB" : "KiB";
+    } else precission = -1;
+    if(size > divider)
+    {
+      size /= divider;
+      unit = (args->decimalSize) ? "MB" : "MiB";
+    } 
+    if(size > divider)
+    {
+      size /= divider;
+      unit = (args->decimalSize) ? "GB" : "GiB";
+    } 
+  } else precission = -1;
+  
+  int digits = getIntDigits(size) + precission + 2; 
+
+  fields->size = calloc(digits+strlen(unit)+2, sizeof(char));
+  snprintf(fields->size, digits, "%f", size);
+  strcat(fields->size, " ");
+  strcat(fields->size, unit);
+  if(digits + strlen(unit) > cSize->size) cSize->size = digits + strlen(unit);
+
+}
+
+void setHardlinks(Fields *fields, File *file, Args *args, ColumnSizes *cSize)
+{
+  int digits = getIntDigits(file->stats->st_nlink); 
+
+  fields->hardlinks = calloc(digits+1, sizeof(char));
+  sprintf(fields->hardlinks, "%d", file->stats->st_nlink);
+  if(digits > cSize->hardlinks) cSize->hardlinks = digits;
+}
+
+void setInode(Fields *fields, File *file, Args *args, ColumnSizes *cSize)
+{
+  int digits = getIntDigits(file->stats->st_ino); 
+
+  fields->inode = calloc(digits+1, sizeof(char));
+  sprintf(fields->inode, "%d", file->stats->st_ino);
+  if(digits > cSize->inode) cSize->inode = digits;
+}
+
 void setDateTime(Fields *fields, File *file, Args *args)
 {
   time_t *time = &(file->stats->st_ctime);
@@ -56,9 +117,7 @@ void setUidGid(Fields *fields, File *file, Args *args, ColumnSizes *cSize)
 {
   if(args->numericUidGid)
   {
-    int digits = 1;
-    if(file->stats->st_uid > 0)
-      digits = log10(file->stats->st_uid)+1;
+    int digits = getIntDigits(file->stats->st_uid);
 
     fields->uid = calloc(digits+1, sizeof(char));
     sprintf(fields->uid, "%d", file->stats->st_uid);
@@ -76,13 +135,11 @@ void setUidGid(Fields *fields, File *file, Args *args, ColumnSizes *cSize)
   {
     if(args->numericUidGid)
     {
-      int digits = 1;
-      if(file->stats->st_gid > 0)
-        digits = log10(file->stats->st_gid)+1;
+      int digits = getIntDigits(file->stats->st_gid);
 
       fields->gid = calloc(digits+1, sizeof(char));
       sprintf(fields->gid, "%d", file->stats->st_gid);
-    if(digits > cSize->gid) cSize->gid = digits;
+      if(digits > cSize->gid) cSize->gid = digits;
 
     }else
     {
@@ -118,6 +175,11 @@ void fillFields(Fields *fields, File *file, PtShConfig *config, Args *args, Colu
   setPermissions(fields, file, args);
   setUidGid(fields, file, args, cSize);
   setDateTime(fields, file, args);
+  setHardlinks(fields, file, args, cSize);
+  setSize(fields, file, args, cSize);
+
+  if(args->inode)
+    setInode(fields, file, args, cSize);
 }
 
 void freeFields(Fields *fields)
@@ -127,5 +189,7 @@ void freeFields(Fields *fields)
   free(fields->date);
   free(fields->time);
   free(fields->size);
+  free(fields->inode);
+  free(fields->hardlinks);
   free(fields);
 }

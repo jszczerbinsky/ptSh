@@ -21,7 +21,6 @@
 #define ALL_ARG_W             "--all"
 #define ALMOST_ALL_ARG_W      "--almost-all"
 #define IGNORE_BACKUPS_ARG_W  "--ignore-backups"
-#define AUTHOR_ARG_W          "--author"
 #define INODE_ARG_W           "--inode"
 #define NO_GROUP_ARG_W        "--no-group"
 #define FULL_TIME_ARG_W       "--full-time"

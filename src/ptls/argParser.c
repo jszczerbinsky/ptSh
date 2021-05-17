@@ -64,7 +64,6 @@ void getWordArg(Args *args, char* str)
   if(strcmp(str, ALL_ARG_W) == 0) args->all = true;
   else if(strcmp(str, ALMOST_ALL_ARG_W) == 0) args->almostAll = true;
   else if(strcmp(str, IGNORE_BACKUPS_ARG_W) == 0) args->ignoreBackups = true;
-  else if(strcmp(str, AUTHOR_ARG_W) == 0) args->author = true;
   else if(strcmp(str, INODE_ARG_W) == 0) args->inode = true;
   else if(strcmp(str, NO_GROUP_ARG_W) == 0) args->noGroup = true;
   else if(strcmp(str, FULL_TIME_ARG_W) == 0) args->fullTime = true;
