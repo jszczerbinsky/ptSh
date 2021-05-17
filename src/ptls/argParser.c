@@ -43,17 +43,11 @@ void getCharArgs(Args* args, char* str){
       case REVERSE_ARG:
         args->reverse = true;
         break;
-      case SORT_ARG:
-        i++;
-        switch(str[i])
-        {
-          case S_X_ARG:
-            args->sExtension = true;
-            break;
-          case S_TIME_ARG:
-            args->sTime = true;
-            break;
-        }
+      case S_X_ARG:
+        args->sExtension = true;
+        break;
+      case S_TIME_ARG:
+        args->sTime = true;
         break;
     } 
   }

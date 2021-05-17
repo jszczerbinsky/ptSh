@@ -13,9 +13,8 @@
 #define DECIMAL_SIZE_ARG      'D'
 #define NUMERIC_UID_GID_ARG   'n'
 #define REVERSE_ARG           'r'
-#define SORT_ARG              's'
 #define S_X_ARG               'x'
-#define S_TIME_ARG            't'
+#define S_TIME_ARG            'm'
 
 #define HELP_ARG_W            "--help"
 #define ALL_ARG_W             "--all"

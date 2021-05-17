@@ -13,8 +13,6 @@ void printHelpLine(char arg, const char* argw, const char* desc, bool sort)
 
   if(arg == ' ')
     printf("   ");
-  else if(sort)
-    printf("-s%c", arg);
   else
     printf("-%c ", arg);
 
