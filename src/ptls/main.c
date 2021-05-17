@@ -86,8 +86,6 @@ int main(int argc, char** argv)
 
   closeConfig(config);
 
-  printf("\n");
-
   free(columnSizes);
   for(int i = 0; i < printSize; i++)
     freeFields(fields[i]);

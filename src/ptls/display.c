@@ -79,6 +79,7 @@ void displayBlock(Fields **fields, int count, ColumnSizes *cSize, Args* args, Pt
       actualColumn = 0;
     }
   }
+  printf("\n");
 }
 
 void printField(char* str, int length, int columnSize)

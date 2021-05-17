@@ -14,6 +14,12 @@ int getIntDigits(int i)
 
 void setSize(Fields *fields, File *file, Args *args, ColumnSizes *cSize)
 {
+  if(S_ISDIR(file->stats->st_mode))
+  {
+    fields->size = calloc(2, sizeof(char));
+    strcpy(fields->size, "-");
+    return;
+  }
   int precission = 1;
 
   float size = file->stats->st_size;
