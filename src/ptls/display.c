@@ -6,7 +6,7 @@
 #include "ptls.h"
 #include "argDefs.h"
 
-void printHelpLine(char arg, const char* argw, const char* desc, bool sort)
+void printHelpLine(char arg, const char* argw, const char* desc)
 {
   const int argwColSize = 20;
   printf("     ");
@@ -27,23 +27,23 @@ void displayHelp()
 {
   printf("Syntax: ptls [ARGS] [PATH]\n");
   printf("\nArguments:\n");
-  printHelpLine(ALL_ARG, ALL_ARG_W, "Displays all files in directory", false);
-  printHelpLine(ALMOST_ALL_ARG, ALMOST_ALL_ARG_W, "Displays all files in directory, except of . and ..", false);
-  printHelpLine(IGNORE_BACKUPS_ARG, IGNORE_BACKUPS_ARG_W, "Ignores files, that ends with ~", false);
-  printHelpLine(L_ARG, "", "Displays more informations about a file", false);
-  printHelpLine(REVERSE_ARG, REVERSE_ARG_W, "Reverses sorting order", false);
+  printHelpLine(ALL_ARG, ALL_ARG_W, ALL_ARG_DESC);
+  printHelpLine(ALMOST_ALL_ARG, ALMOST_ALL_ARG_W, ALMOST_ALL_ARG_DESC);
+  printHelpLine(IGNORE_BACKUPS_ARG, IGNORE_BACKUPS_ARG_W, IGNORE_BACKUPS_ARG_DESC);
+  printHelpLine(L_ARG, L_ARG_W, L_ARG_DESC);
   printf("\nSort arguments:\n");
-  printHelpLine(S_X_ARG, "", "Sort by extension instead of name", true);
-  printHelpLine(S_TIME_ARG, "", "Sort by last modification time instead of name", true);
+  printHelpLine(S_X_ARG, S_X_ARG_W, S_X_ARG_DESC);
+  printHelpLine(S_TIME_ARG, S_TIME_ARG_W, S_TIME_ARG_DESC);
+  printHelpLine(REVERSE_ARG, REVERSE_ARG_W, REVERSE_ARG_DESC);
   printf("\nArguments only used with -l:\n");
-  printHelpLine(INODE_ARG, INODE_ARG_W, "Shows file inode", false);
-  printHelpLine(NO_GROUP_ARG, NO_GROUP_ARG_W, "Ignores information about group", false);
-  printHelpLine(TIME_ARG, "", "Shows last modifiaction time as HH:MM", false);
-  printHelpLine(FULL_TIME_ARG, FULL_TIME_ARG_W, "Shows last modification time as HH:MM:SS", false);
-  printHelpLine(FULL_SIZE_ARG, FULL_SIZE_ARG_W, "Shows file size in bytes", false);
-  printHelpLine(DECIMAL_SIZE_ARG, DECIMAL_SIZE_ARG_W, "Shows size in decimal units instead of binary", false);
-  printHelpLine(NUMERIC_UID_GID_ARG, NUMERIC_UID_GID_ARG_W, "Displays UID and GID numbers instead of names", false);
-  printHelpLine(' ', NO_DIRS_TOP_ARG_W, "Don't group directories on top", false);
+  printHelpLine(INODE_ARG, INODE_ARG_W, INODE_ARG_DESC);
+  printHelpLine(NO_GROUP_ARG, NO_GROUP_ARG_W, NO_GROUP_ARG_DESC);
+  printHelpLine(TIME_ARG, TIME_ARG_W, TIME_ARG_DESC);
+  printHelpLine(FULL_TIME_ARG, FULL_TIME_ARG_W, FULL_TIME_ARG_DESC);
+  printHelpLine(FULL_SIZE_ARG, FULL_SIZE_ARG_W, FULL_SIZE_ARG_DESC);
+  printHelpLine(DECIMAL_SIZE_ARG, DECIMAL_SIZE_ARG_W, DECIMAL_SIZE_ARG_DESC);
+  printHelpLine(NUMERIC_UID_GID_ARG, NUMERIC_UID_GID_ARG_W, NUMERIC_UID_GID_ARG_DESC);
+  printHelpLine(NO_DIRS_TOP_ARG, NO_DIRS_TOP_ARG_W, NO_DIRS_TOP_ARG_DESC);
 
 }
 
