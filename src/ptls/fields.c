@@ -159,23 +159,28 @@ void setUidGid(Fields *fields, File *file, Args *args, ColumnSizes *cSize)
 
 void fillFields(Fields *fields, File *file, PtShConfig *config, Args *args, ColumnSizes *cSize)
 {
-  char* prefixEC = getPrefixEscapeCodes(config, file->stats);
-  char* prefix = getPrefix(config, file->stats);
-  char* nameEC = getNameEscapeCodes(config, file->stats);
+  FileType fType = FT_File;
   
-  int nameLength = strlen(prefix) + strlen(file->name);
+  if(S_ISDIR(file->stats->st_mode)) fType = FT_Directory;
+  else if(S_ISLNK(file->stats->st_mode)) fType = FT_Link;
+
+  FileConfigValues *fcv = getFileConfigValues(config, fType);
+  
+  int nameLength = strlen(fcv->prefix) + strlen(file->name);
   fields->nameLength = nameLength;
   if(nameLength > cSize->name) cSize->name = nameLength;
 
-  nameLength += strlen(prefixEC) + strlen(nameEC) + strlen("\x1b[0m")*2;
+  nameLength += strlen(fcv->prefixEscapeCodes) + strlen(fcv->nameEscapeCodes) + strlen("\x1b[0m")*2;
 
   fields->name = calloc(nameLength+1, sizeof(char));
-  strcpy(fields->name, prefixEC);
-  strcat(fields->name, prefix);
+  strcpy(fields->name, fcv->prefixEscapeCodes);
+  strcat(fields->name, fcv->prefix);
   strcat(fields->name, "\x1b[0m");
-  strcat(fields->name, nameEC);
+  strcat(fields->name, fcv->nameEscapeCodes);
   strcat(fields->name, file->name);
   strcat(fields->name, "\x1b[0m");
+
+  free(fcv);
 
   if(!args->l) return;
   setPermissions(fields, file, args);

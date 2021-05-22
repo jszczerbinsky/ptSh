@@ -42,11 +42,11 @@ SUCCESS_MESSAGE_ESCAPE_CODES=''               # Escape codes for success message
 #
 # Options for ptls script
 #
-LS_MIN_FILE_OFFSET=5                          # Offset between displayed files/directories
+LS_MIN_FILE_OFFSET='5'                        # Offset between displayed files/directories
 
 #
 # Options for ptpwd script
 #
-PWD_NEXTLINE_MARGIN=2                         # Left margin increment for next lines (can be 0 as well)
-PWD_SHOW_DIR_PREFIX=1                         # If value is 1 - directory prefixes will be displayed
+PWD_NEXTLINE_MARGIN='2'                       # Left margin increment for next lines (can be 0 as well)
+PWD_SHOW_DIR_PREFIX='1'                       # If value is 1 - directory prefixes will be displayed
 PWD_LINE_ESCAPE_CODES=''                      # Escape codes for directory arrow symbol

@@ -28,11 +28,21 @@ typedef struct PtShConfig_{
   char* successMessageEscapeCodes;
 } PtShConfig;
 
+typedef enum FileType_{
+  FT_Directory,
+  FT_Link,
+  FT_File
+} FileType;
+
+typedef struct FileConfigValues_{
+  char* prefixEscapeCodes; 
+  char* prefix;
+  char* nameEscapeCodes;
+} FileConfigValues;
+
 PtShConfig *readConfig();
 void closeConfig(PtShConfig *config);
 
-char *getPrefix(PtShConfig *config, struct stat *stats);
-char *getPrefixEscapeCodes(PtShConfig *config, struct stat *stats);
-char *getNameEscapeCodes(PtShConfig *config, struct stat *stats);
+FileConfigValues *getFileConfigValues(PtShConfig *config, FileType type);
 
 #endif

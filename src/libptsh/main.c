@@ -168,51 +168,40 @@ void closeConfig(PtShConfig *config)
   free(config);
 }
 
-
-char *getPrefix(PtShConfig *config, struct stat *stats)
+char *getValueStr(char* field)
 {
-  if(S_ISDIR(stats->st_mode))
-  {
-    if(config->dirPrefix != NULL) return config->dirPrefix;
-    else return "";
-  }
-  if(S_ISLNK(stats->st_mode))
-  {
-    if(config->linkPrefix != NULL) return config->linkPrefix;
-    else return "";
-  }
-  if(config->filePrefix != NULL) return config->filePrefix;
-  else return "";
+  if(field == NULL) return "";
+  return field;
 }
-char *getPrefixEscapeCodes(PtShConfig *config, struct stat *stats)
-{
-  if(S_ISDIR(stats->st_mode))
-  {
-    if(config->dirPrefixEscapeCodes != NULL) return config->dirPrefixEscapeCodes;
-    else return "";
-  }
-  if(S_ISLNK(stats->st_mode))
-  {
-    if(config->linkPrefixEscapeCodes != NULL) return config->linkPrefixEscapeCodes;
-    else return "";
-  }
-  if(config->filePrefixEscapeCodes != NULL) return config->filePrefixEscapeCodes;
-  else return "";
 
+int getValueInt(char* field)
+{
+  for(int i = 0; i < strlen(field); i++)
+    if(field[i] < 48 || field[i] > 57)
+      return 0;
+  return atoi(field);
 }
-char *getNameEscapeCodes(PtShConfig *config, struct stat *stats)
-{
-  if(S_ISDIR(stats->st_mode))
-  {
-    if(config->dirNameEscapeCodes != NULL) return config->dirNameEscapeCodes;
-    else return "";
-  }
-  if(S_ISLNK(stats->st_mode))
-  {
-    if(config->linkNameEscapeCodes != NULL) return config->linkNameEscapeCodes;
-    else return "";
-  }
-  if(config->fileNameEscapeCodes != NULL) return config->fileNameEscapeCodes;
-  else return "";
 
+FileConfigValues *getFileConfigValues(PtShConfig *config, FileType type)
+{
+  FileConfigValues *val = calloc(1, sizeof(FileConfigValues));
+  switch(type)
+  {
+    case FT_Directory:
+      val->prefixEscapeCodes = getValueStr(config->dirPrefixEscapeCodes);
+      val->prefix = getValueStr(config->dirPrefix);
+      val->nameEscapeCodes = getValueStr(config->dirNameEscapeCodes);
+      break;
+    case FT_Link:
+      val->prefixEscapeCodes = getValueStr(config->linkPrefixEscapeCodes);
+      val->prefix = getValueStr(config->linkPrefix);
+      val->nameEscapeCodes = getValueStr(config->linkNameEscapeCodes);
+      break;
+    case FT_File:
+      val->prefixEscapeCodes = getValueStr(config->filePrefixEscapeCodes);
+      val->prefix = getValueStr(config->filePrefix);
+      val->nameEscapeCodes = getValueStr(config->fileNameEscapeCodes);
+  }
+
+  return val;
 }
