@@ -11,11 +11,11 @@ install:
 	mkdir -p ~/.local/bin
 	make -C src/libptsh
 	make -C src/ptls
+	make -C src/ptpwd
 	cp src/config ~/.local/share/ptSh/config
 	cp src/set_aliases.sh ~/.local/bin/ptSh_set_aliases
 	cp LICENSE ~/.local/share/ptSh/LICENSE
 	cp src/logo.txt ~/.local/share/ptSh/logo.txt
-	cp src/ptPwd.sh ~/.local/bin/ptpwd
 	cp src/ptMkdir.sh ~/.local/bin/ptmkdir
 	cp src/ptTouch.sh ~/.local/bin/pttouch
 	cp src/ptCp.sh ~/.local/bin/ptcp
