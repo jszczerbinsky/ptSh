@@ -16,10 +16,6 @@ install:
 	cp src/set_aliases.sh ~/.local/bin/ptSh_set_aliases
 	cp LICENSE ~/.local/share/ptSh/LICENSE
 	cp src/logo.txt ~/.local/share/ptSh/logo.txt
-	cp src/ptMkdir.sh ~/.local/bin/ptmkdir
-	cp src/ptTouch.sh ~/.local/bin/pttouch
-	cp src/ptCp.sh ~/.local/bin/ptcp
-	cp src/ptRm.sh ~/.local/bin/ptrm
 	cp src/ptsh.sh ~/.local/bin/ptsh
 	mkdir -p ~/.config
 	mkdir -p ~/.config/ptSh
@@ -35,8 +31,4 @@ uninstall:
 	rm ~/.local/bin/ptSh_set_aliases
 	rm ~/.local/bin/ptls
 	rm ~/.local/bin/ptpwd
-	rm ~/.local/bin/ptmkdir
-	rm ~/.local/bin/pttouch
-	rm ~/.local/bin/ptcp
-	rm ~/.local/bin/ptrm
 	rm ~/.local/bin/ptsh
