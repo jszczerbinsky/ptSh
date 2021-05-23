@@ -46,13 +46,40 @@ void freeDirs(PathDirs *dirs)
   free(dirs);
 }
 
+void displayDir(PtShConfig *config, char *name, FileConfigValues *fcv)
+{
+  if(getValueInt(config->pwdShowDirPrefix))
+    printf("%s%s\x1b[0m%s", fcv->prefixEscapeCodes, fcv->prefix, fcv->nameEscapeCodes);
+
+  printf("%s\x1b[0m", name);
+
+  if(getValueInt(config->pwdNextline))
+    printf("\n");
+
+}
+
 void display(char *path, PtShConfig *config)
 {
   PathDirs *dirs = getDirs(path);
+  FileConfigValues *fcv = getFileConfigValues(config, FT_Directory);
+
+  displayDir(config, "/", fcv);
 
   for(int i = 0; i < dirs->count; i++)
-    printf("%s\n", dirs->names[i]);
+  {
+    if(getValueInt(config->pwdNextline))
+    {
+      int margin = getValueInt(config->pwdNextlineMargin);
+      for(int x = 0; x < margin*i; x++)
+        printf(" ");
+    }
+    printf("%s%s\x1b[0m", getValueStr(config->pwdDirSeparatorEscapeCodes), getValueStr(config->pwdDirSeparator));
+    displayDir(config, dirs->names[i], fcv);
+  }
 
+  if(!getValueInt(config->pwdNextline)) printf("\n");
+
+  free(fcv);
   freeDirs(dirs);
 }
 
