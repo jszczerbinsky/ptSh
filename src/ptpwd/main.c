@@ -3,11 +3,32 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "argDefs.h"
 #include "ptpwd.h"
+
+void printHelpLine(const char* arg, const char* argw, const char* desc)
+{
+  const int argwColSize = 20;
+  printf("     ");
+
+  if(arg == ' ')
+    printf("   ");
+  else
+    printf("-%c ", arg);
+
+  printf(" ");
+
+  printf("%s  ", argw);
+  for(int i = 0; i < argwColSize - strlen(argw); i++) printf(" ");
+  printf("%s\n", desc);
+
+}
 
 void displayHelp()
 {
-
+  printf("Syntax: ptpwd [ARGS]\n");
+  printf("\nArguments:\n");
+  printHelpLine(LOGICAL_PATH_ARG, LOGICAL_PATH_ARG_W, LOGICAL_PATH_ARG_DESC);
 }
 
 PathDirs *getDirs(char *path)
@@ -87,7 +108,11 @@ int main(int argc, char **argv)
 {
   Args *args = parseArgs(argc, argv);
 
-  if(args->help) displayHelp();
+  if(args->help)
+  {
+    displayHelp();
+    return 0;
+  }
 
   char *pwd = getenv("PWD");
   
