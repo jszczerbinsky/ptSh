@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 
   freeMoveData(mData);
 
-  free(args);
+  freeArgs(args);
   
   return 0;
 }

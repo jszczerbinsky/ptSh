@@ -50,12 +50,23 @@ Args *parseArgs(int argc, char **argv)
     {
       if(!sourcePath)
       {
-        args->sourcePath = argv[i];
+        args->sourcePath = calloc(strlen(argv[i])+1, sizeof(char));
+        strcpy(args->sourcePath, argv[i]);
         sourcePath = true;
-      } else args->destPath = argv[i];
+      } else 
+      {
+        args->destPath = calloc(strlen(argv[i])+1, sizeof(char));
+        strcpy(args->destPath, argv[i]);
+      }
     }
   }
 
   return args;
+}
 
+void freeArgs(Args *args)
+{
+  free(args->sourcePath);
+  free(args->destPath);
+  free(args);
 }
