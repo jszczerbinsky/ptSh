@@ -12,6 +12,7 @@ install:
 	make -C src/libptsh
 	make -C src/ptls
 	make -C src/ptpwd
+	make -C src/ptmove
 	cp src/config ~/.local/share/ptSh/config
 	cp src/set_aliases.sh ~/.local/bin/ptSh_set_aliases
 	cp LICENSE ~/.local/share/ptSh/LICENSE
@@ -31,4 +32,5 @@ uninstall:
 	rm ~/.local/bin/ptSh_set_aliases
 	rm ~/.local/bin/ptls
 	rm ~/.local/bin/ptpwd
+	rm ~/.local/bin/ptmove
 	rm ~/.local/bin/ptsh

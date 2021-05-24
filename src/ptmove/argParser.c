@@ -48,9 +48,10 @@ Args *parseArgs(int argc, char **argv)
     }
     else
     {
-      if(sourcePath)
+      if(!sourcePath)
       {
         args->sourcePath = argv[i];
+        sourcePath = true;
       } else args->destPath = argv[i];
     }
   }
