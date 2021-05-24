@@ -14,7 +14,46 @@ void removeSlash(char ** val)
 
 void scanSubdir(Args *args, DIR *source, MoveData *data, char* subPath)
 {
-  printf("scan subdir");
+  struct dirent *d;
+
+  while((d = readdir(source)) != NULL)
+  {
+    if(d->d_type == DT_DIR)
+    {
+      if(strcmp(&d->d_name[0], ".") == 0 || strcmp(&d->d_name[0], "..") == 0) continue;
+
+      char* newSubPath = calloc(strlen(subPath) + 2 + strlen(&d->d_name[0]), sizeof(char));
+      strcpy(newSubPath, subPath);
+      strcat(newSubPath, &d->d_name[0]);
+      strcat(newSubPath, "/");
+
+      scanSubdir(args, opendir(newSubPath), data, newSubPath);
+
+      free(newSubPath);
+      continue;
+    } 
+
+    if(data->files == NULL)
+      data->files = calloc(1, sizeof(FilePaths*));
+    else
+      data->files = realloc(data->files, (data->fileCount+1) * sizeof(FilePaths*));
+
+    FilePaths **filePtr = &data->files[data->fileCount];
+
+    (*filePtr) = calloc(1, sizeof(FilePaths));
+
+    (*filePtr)->sourcePath = calloc(strlen(subPath) + strlen(&d->d_name[0]) +1, sizeof(char));
+    strcpy((*filePtr)->sourcePath, subPath);
+    strcat((*filePtr)->sourcePath, &d->d_name[0]);
+
+    (*filePtr)->destPath = calloc(strlen(args->destPath) +strlen(subPath) + strlen(&d->d_name[0]) +2, sizeof(char));
+    strcpy((*filePtr)->destPath, args->destPath);
+    strcat((*filePtr)->destPath, "/");
+    strcat((*filePtr)->destPath, subPath);
+    strcat((*filePtr)->destPath, &d->d_name[0]);
+
+    data->fileCount++;
+  }
 }
 
 MoveData *copyToDir(Args *args)
@@ -27,7 +66,14 @@ MoveData *copyToDir(Args *args)
   DIR *sourceDir = opendir(args->sourcePath);
   if(sourceDir)
   {
-    scanSubdir(args, sourceDir, data, "/"); 
+    char *subPath = calloc(strlen(args->sourcePath) +2, sizeof(char));
+    strcpy(subPath, args->sourcePath);
+    strcat(subPath, "/");
+
+    scanSubdir(args, sourceDir, data, subPath); 
+
+    free(subPath);
+
     closedir(sourceDir);
     return data;
   }
