@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <linux/limits.h>
 
 #include "ptmove.h"
 
@@ -26,6 +27,16 @@ void addFile(Args *args, MoveData *data, char *source, char *dest)
   (*filePtr)->sourcePath = source;
   (*filePtr)->destPath = dest;
 
+  char path[PATH_MAX+1];
+
+  realpath(source, path);
+
+  struct stat *stats = malloc(sizeof(struct stat));
+
+  stat(path, stats);
+  data->totalBytes += stats->st_size;
+
+  free(stats);
   data->fileCount++;
 
 }

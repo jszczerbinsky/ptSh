@@ -17,6 +17,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
+  printf("%d bytes\n", mData->totalBytes);
   printf("%d\n", mData->fileCount);
   for(int i = 0; i < mData->fileCount; i++)
   {
