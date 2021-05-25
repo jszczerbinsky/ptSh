@@ -12,7 +12,25 @@ void removeSlash(char ** val)
     (*val)[strlen(*val)-1] = '\0';
 }
 
-void scanSubdir(Args *args, DIR *source, MoveData *data, char* subPath)
+void addFile(Args *args, MoveData *data, char *source, char *dest)
+{
+  if(data->files == NULL)
+    data->files = calloc(1, sizeof(FilePaths*));
+  else
+    data->files = realloc(data->files, (data->fileCount+1) * sizeof(FilePaths*));
+
+  FilePaths **filePtr = &data->files[data->fileCount];
+
+  (*filePtr) = calloc(1, sizeof(FilePaths));
+
+  (*filePtr)->sourcePath = source;
+  (*filePtr)->destPath = dest;
+
+  data->fileCount++;
+
+}
+
+void scanSubdir(Args *args, DIR *source, MoveData *data, char* subPath, int ignoreDestSubPath)
 {
   struct dirent *d;
 
@@ -27,32 +45,24 @@ void scanSubdir(Args *args, DIR *source, MoveData *data, char* subPath)
       strcat(newSubPath, &d->d_name[0]);
       strcat(newSubPath, "/");
 
-      scanSubdir(args, opendir(newSubPath), data, newSubPath);
+      scanSubdir(args, opendir(newSubPath), data, newSubPath, ignoreDestSubPath+strlen(&d->d_name[0]-1));
 
       free(newSubPath);
       continue;
     } 
+    char *source = calloc(strlen(subPath) + strlen(&d->d_name[0]) +1, sizeof(char));
+    strcpy(source, subPath);
+    strcat(source, &d->d_name[0]);
 
-    if(data->files == NULL)
-      data->files = calloc(1, sizeof(FilePaths*));
-    else
-      data->files = realloc(data->files, (data->fileCount+1) * sizeof(FilePaths*));
+    char *ptr = subPath +strlen(subPath)- ignoreDestSubPath;
 
-    FilePaths **filePtr = &data->files[data->fileCount];
+    char *dest = calloc(strlen(args->destPath) +strlen(ptr) + strlen(&d->d_name[0]) +2, sizeof(char));
+    strcpy(dest, args->destPath);
+    strcat(dest, "/");
+    strcat(dest, ptr);
+    strcat(dest, &d->d_name[0]);
 
-    (*filePtr) = calloc(1, sizeof(FilePaths));
-
-    (*filePtr)->sourcePath = calloc(strlen(subPath) + strlen(&d->d_name[0]) +1, sizeof(char));
-    strcpy((*filePtr)->sourcePath, subPath);
-    strcat((*filePtr)->sourcePath, &d->d_name[0]);
-
-    (*filePtr)->destPath = calloc(strlen(args->destPath) +strlen(subPath) + strlen(&d->d_name[0]) +2, sizeof(char));
-    strcpy((*filePtr)->destPath, args->destPath);
-    strcat((*filePtr)->destPath, "/");
-    strcat((*filePtr)->destPath, subPath);
-    strcat((*filePtr)->destPath, &d->d_name[0]);
-
-    data->fileCount++;
+    addFile(args, data, source, dest);
   }
 }
 
@@ -61,67 +71,71 @@ MoveData *copyToDir(Args *args)
   MoveData *data = calloc(1, sizeof(MoveData));
   
   removeSlash(&args->destPath);
-  removeSlash(&args->sourcePath);
+  for(int i = 0; i < args->sourcePathCount; i++)
+    removeSlash(&args->sourcePath[i]);
    
-  DIR *sourceDir = opendir(args->sourcePath);
-  if(sourceDir)
+  for(int x = 0; x < args->sourcePathCount; x++)
   {
-    char *subPath = calloc(strlen(args->sourcePath) +2, sizeof(char));
-    strcpy(subPath, args->sourcePath);
-    strcat(subPath, "/");
+    char *sourcePath = args->sourcePath[x];
 
-    scanSubdir(args, sourceDir, data, subPath); 
-
-    free(subPath);
-
-    closedir(sourceDir);
-    return data;
-  }
-
-  struct stat *stats = calloc(1,sizeof(struct stat));
-
-  if(stat(args->sourcePath, stats) == 0)
-  {
-    
-    data->fileCount = 1;
-    data->totalBytes = stats->st_size;
-
-    data->files = calloc(1, sizeof(FilePaths*));
-    data->files[0] = calloc(1, sizeof(FilePaths));
-    
-    data->files[0]->sourcePath = calloc(strlen(args->sourcePath) +1, sizeof(char));
-    strcpy(data->files[0]->sourcePath, args->sourcePath);
-
-    int nameLength = 0;
-    char* ptr = args->sourcePath+strlen(args->sourcePath)-1;
-
-    while(*ptr != '/' && nameLength < strlen(args->sourcePath))
+    DIR *sourceDir = opendir(sourcePath);
+    if(sourceDir)
     {
-      nameLength++;
-      ptr--;
-    }
-    ptr++;
+      char *subPath = calloc(strlen(sourcePath) +2, sizeof(char));
+      strcpy(subPath, sourcePath);
+      strcat(subPath, "/");
 
-    
-    data->files[0]->destPath = calloc(strlen(args->destPath) + nameLength + 2, sizeof(char));
-    strcpy(data->files[0]->destPath, args->destPath);
-    strcat(data->files[0]->destPath, "/");
-    strcat(data->files[0]->destPath, ptr);
-    
+      int ignoreDestSubPath = 1;
+      char *ptr = subPath+strlen(subPath)-2;
+      while(*ptr != '/' && ptr != subPath-1) 
+      {
+        ptr--;
+        ignoreDestSubPath++;
+      }
+      ptr++;
+
+      scanSubdir(args, sourceDir, data, subPath, ignoreDestSubPath); 
+
+      free(subPath);
+
+      closedir(sourceDir);
+      continue;
+    }
+
+    struct stat *stats = calloc(1,sizeof(struct stat));
+
+    if(stat(sourcePath, stats) == 0)
+    {
+      char *ptr = sourcePath+strlen(sourcePath)-1;
+
+      while(*ptr != '/' && ptr != sourcePath)
+      {
+        ptr--;
+      }
+      ptr++;
+
+      char *dest = calloc(strlen(ptr)+2+strlen(args->destPath), sizeof(char));
+      strcpy(dest, args->destPath);
+      strcat(dest, "/");
+      strcat(dest, ptr);
+
+      char *source = calloc(strlen(sourcePath)+1, sizeof(char));
+      strcpy(source, sourcePath);
+
+      addFile(args, data, source, dest);
+    }
+
     free(stats);
-    return data;
   }
 
-  free(stats);
-  free(data);
-  return NULL;
+  return data;
 }
 
 MoveData *copyToFile(Args *args)
 {
   struct stat *stats = calloc(1, sizeof(struct stat));
 
-  if(stat(args->sourcePath, stats) != 0)
+  if(stat(args->sourcePath[0], stats) != 0)
   {
     free(stats);
     return NULL;
@@ -134,8 +148,8 @@ MoveData *copyToFile(Args *args)
   data->files = calloc(1, sizeof(FilePaths*));
   data->files[0] = calloc(1, sizeof(FilePaths));
   
-  data->files[0]->sourcePath = calloc(strlen(args->sourcePath) +1, sizeof(char));
-  strcpy(data->files[0]->sourcePath, args->sourcePath);
+  data->files[0]->sourcePath = calloc(strlen(args->sourcePath[0]) +1, sizeof(char));
+  strcpy(data->files[0]->sourcePath, args->sourcePath[0]);
   data->files[0]->destPath = calloc(strlen(args->destPath) +1, sizeof(char));
   strcpy(data->files[0]->destPath, args->destPath);
 

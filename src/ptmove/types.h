@@ -8,7 +8,8 @@ typedef struct Args_{
   bool recursive;
   bool interactive;
   bool update;
-  char *sourcePath;
+  char **sourcePath;
+  int sourcePathCount;
   char *destPath;
 } Args;
 

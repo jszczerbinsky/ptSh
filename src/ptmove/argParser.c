@@ -35,12 +35,11 @@ void getWordArg(Args *args, char* str)
 Args *parseArgs(int argc, char **argv)
 {
   Args *args = (Args*)calloc(1, sizeof(Args));
+  args->sourcePath = calloc(1, sizeof(char*));
 
   if(argc == 1) return args;
 
-  bool sourcePath = false;
-
-  for(int i = 1; i < argc; i++)
+  for(int i = 1; i < argc - 1; i++)
   {
     if(argv[i][0] == '-'){
       if(argv[i][1] == '-') getWordArg(args, argv[i]);
@@ -48,24 +47,22 @@ Args *parseArgs(int argc, char **argv)
     }
     else
     {
-      if(!sourcePath)
-      {
-        args->sourcePath = calloc(strlen(argv[i])+1, sizeof(char));
-        strcpy(args->sourcePath, argv[i]);
-        sourcePath = true;
-      } else 
-      {
-        args->destPath = calloc(strlen(argv[i])+1, sizeof(char));
-        strcpy(args->destPath, argv[i]);
-      }
+      args->sourcePath = realloc(args->sourcePath, (args->sourcePathCount+1)*sizeof(char*));
+      args->sourcePath[args->sourcePathCount] = calloc(strlen(argv[i])+1, sizeof(char));
+      strcpy(args->sourcePath[args->sourcePathCount], argv[i]);
+      args->sourcePathCount++;
     }
   }
+  args->destPath = calloc(strlen(argv[argc-1])+1, sizeof(char));
+  strcpy(args->destPath, argv[argc-1]);
 
   return args;
 }
 
 void freeArgs(Args *args)
 {
+  for(int i = 0; i < args->sourcePathCount; i++)
+    free(args->sourcePath[i]);
   free(args->sourcePath);
   free(args->destPath);
   free(args);
