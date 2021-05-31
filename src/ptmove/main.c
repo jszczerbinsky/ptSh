@@ -19,11 +19,21 @@ int main(int argc, char **argv)
 
   printf("%d bytes\n", mData->totalBytes);
   printf("%d\n", mData->fileCount);
-  for(int i = 0; i < mData->fileCount; i++)
+
+/*  setProgressBar(50,0);
+  for(int i = 0; i < mData->totalBytes; i+= mData->totalBytes/10)
   {
-    printf("%s ->", mData->files[i]->sourcePath);
-    printf(" %s\n", mData->files[i]->destPath);
+    int count = (100*i)/mData->totalBytes;
+    setProgressBar(50,count);
+    sleep(1);
   }
+  setProgressBar(50, 100);
+  printf("\n");
+*/
+//  for(int i = 0; i < mData->subdirCount; i++)
+//    printf("%s\n", mData->subdirs[i]->name);
+
+  copyFiles(args, mData);
 
   freeMoveData(mData);
 

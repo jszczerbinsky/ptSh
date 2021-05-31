@@ -2,6 +2,7 @@
 #define PTMOVE_TYPES_H
 
 #include <stdbool.h>
+#include <sys/stat.h>
 
 typedef struct Args_{
   bool copy;
@@ -13,6 +14,11 @@ typedef struct Args_{
   char *destPath;
 } Args;
 
+typedef struct Subdir_{
+  char *name;
+  mode_t mode;
+} Subdir;
+
 typedef struct FilePaths_{
   char *sourcePath;
   char *destPath;
@@ -21,7 +27,9 @@ typedef struct FilePaths_{
 typedef struct MoveData_{
   FilePaths **files;
   int fileCount;
-  int totalBytes;
+  Subdir **subdirs;
+  int subdirCount;
+  unsigned long totalBytes;
 } MoveData;
 
 #endif
