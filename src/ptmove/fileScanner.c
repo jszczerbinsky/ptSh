@@ -13,8 +13,36 @@ void removeSlash(char ** val)
     (*val)[strlen(*val)-1] = '\0';
 }
 
-void addFile(Args *args, MoveData *data, char *source, char *dest)
+void addFile(Args *args, PtShConfig *config, MoveData *data, char *source, char *dest)
 {
+  char path[PATH_MAX+1];
+  realpath(source, path);
+
+  struct stat stats;
+  stat(path, &stats);
+
+  if(args->interactive)
+  {
+    FileType type = FT_File;
+    if(S_ISLNK(stats.st_mode))
+      type = FT_Link;
+
+    FileConfigValues *fcv = getFileConfigValues(config, type);
+    printf("\r%c[2K", 27); 
+    printf("%s%s\x1b[0m%s", fcv->prefixEscapeCodes, fcv->prefix, fcv->nameEscapeCodes);
+    printf("%s", source);
+    printf("\x1b[0m (y/n)\n\b");
+
+    free(fcv);
+
+    char c;
+    do
+      c = getchar();
+    while(c != 'y' && c != 'n');
+
+    if(c == 'n') return;
+  }
+
   if(data->files == NULL)
     data->files = calloc(1, sizeof(FilePaths*));
   else
@@ -27,16 +55,8 @@ void addFile(Args *args, MoveData *data, char *source, char *dest)
   (*filePtr)->sourcePath = source;
   (*filePtr)->destPath = dest;
 
-  char path[PATH_MAX+1];
+  data->totalBytes += stats.st_size;
 
-  realpath(source, path);
-
-  struct stat *stats = malloc(sizeof(struct stat));
-
-  stat(path, stats);
-  data->totalBytes += stats->st_size;
-
-  free(stats);
   data->fileCount++;
 }
 
@@ -68,7 +88,7 @@ void addSubdir(Args *args, MoveData *data, char *source, char *dest)
   free(sourceStats);
 }
 
-void scanSubdir(Args *args, DIR *sourceDir, MoveData *data, char* subPath, int ignoreDestSubPath)
+void scanSubdir(Args *args, PtShConfig *config, DIR *sourceDir, MoveData *data, char* subPath, int ignoreDestSubPath)
 {
   struct dirent *d;
 
@@ -85,7 +105,7 @@ void scanSubdir(Args *args, DIR *sourceDir, MoveData *data, char* subPath, int i
       strcat(newSubPath, &d->d_name[0]);
       strcat(newSubPath, "/");
 
-      scanSubdir(args, opendir(newSubPath), data, newSubPath, ignoreDestSubPath+strlen(&d->d_name[0]-1));
+      scanSubdir(args, config, opendir(newSubPath), data, newSubPath, ignoreDestSubPath+strlen(&d->d_name[0]-1));
 
       free(newSubPath);
       continue;
@@ -102,11 +122,11 @@ void scanSubdir(Args *args, DIR *sourceDir, MoveData *data, char* subPath, int i
     strcat(dest, ptr);
     strcat(dest, &d->d_name[0]);
 
-    addFile(args, data, source, dest);
+    addFile(args, config, data, source, dest);
   }
 }
 
-MoveData *copyToDir(Args *args)
+MoveData *copyToDir(Args *args, PtShConfig *config)
 {
   MoveData *data = calloc(1, sizeof(MoveData));
   
@@ -134,7 +154,7 @@ MoveData *copyToDir(Args *args)
       }
       ptr++;
 
-      scanSubdir(args, sourceDir, data, subPath, ignoreDestSubPath); 
+      scanSubdir(args, config, sourceDir, data, subPath, ignoreDestSubPath); 
 
       free(subPath);
 
@@ -162,7 +182,7 @@ MoveData *copyToDir(Args *args)
       char *source = calloc(strlen(sourcePath)+1, sizeof(char));
       strcpy(source, sourcePath);
 
-      addFile(args, data, source, dest);
+      addFile(args, config, data, source, dest);
     }
 
     free(stats);
@@ -197,14 +217,14 @@ MoveData *copyToFile(Args *args)
   return data;
 }
 
-MoveData *getMoveData(Args *args)
+MoveData *getMoveData(Args *args, PtShConfig *config)
 {
   DIR *dir = opendir(args->destPath);
 
   if(dir)
   {
     closedir(dir);
-    return copyToDir(args);
+    return copyToDir(args, config);
   }else
   {
     FILE *file = fopen(args->destPath, "w");

@@ -4,7 +4,7 @@
 void setProgressBar(int size, int percentage)
 {
   if(percentage > 100) percentage = 100;
-  size -= 2;
+  size -= 3;
   int blocks = percentage*size/100;
 
   char *percentageStr = calloc(5, sizeof(char));
@@ -24,7 +24,7 @@ void setProgressBar(int size, int percentage)
     else
       printf(" ");
   }
-  printf("\x1b[40m]\x1b[0m");
+  printf("\x1b[40m]\x1b[0m ");
   fflush(stdout);
 
   free(percentageStr);
