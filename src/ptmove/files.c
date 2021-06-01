@@ -18,22 +18,33 @@ void createSubdirs(Args *args, MoveData *mData)
   } 
 }
 
-void copyFile(FilePaths *paths, unsigned long *actualByte, int * totalBytes)
+void copyFile(FilePaths *paths, unsigned long *actualByte, unsigned long* totalBytes)
 {
   FILE *source = fopen(paths->sourcePath, "rb");
   FILE *dest = fopen(paths->destPath, "wb");
 
-  char buff[1000];
+  const unsigned int buffSize = 1000;
+  unsigned char buff[buffSize];
 
-  while(fgets(buff, 1000, source))
+  size_t readCount = 0;
+
+  do
   {
-    fputs(buff, dest); 
-    (*actualByte) += 1000;
+    readCount = fread(buff, sizeof(unsigned char), buffSize, source);
+    fwrite(buff, sizeof(unsigned char), readCount, dest); 
+
+    (*actualByte) += readCount * sizeof(unsigned char);
     setProgressBar(50, (100*(*actualByte))/(*totalBytes));
-  }
+
+  } while(readCount == buffSize);
 
   fclose(source);
   fclose(dest);
+
+  struct stat stats;
+
+  stat(paths->sourcePath, &stats);
+  chmod(paths->destPath, stats.st_mode);
 }
 
 void copyFiles(Args *args, MoveData *mData)
