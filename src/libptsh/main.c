@@ -41,6 +41,8 @@ void setPattern(char** destination, char* line, const char* pattern)
   int escapeCodes = 0;
   ptr = *destination;
 
+  if(strlen(*destination) < 4) return;
+
   for(int i = 0; i < strlen(*destination)-3; i++)
   {
     if(
@@ -94,6 +96,12 @@ void parseLine(PtShConfig *config, char* line)
   setPattern(&config->errorMessageEscapeCodes, line, "ERROR_MESSAGE_ESCAPE_CODES");
   setPattern(&config->successPrefixEscapeCodes, line, "SUCCESS_PREFIX_ESCAPE_CODES");
   setPattern(&config->successMessageEscapeCodes, line, "SUCCESS_MESSAGE_ESCAPE_CODES");
+  setPattern(&config->pwdDirSeparator, line, "PWD_DIR_SEPARATOR");
+  setPattern(&config->pwdDirSeparatorEscapeCodes, line, "PWD_DIR_SEPARATOR_ESCAPE_CODES");
+  setPattern(&config->pwdNextline, line, "PWD_NEXTLINE");
+  setPattern(&config->pwdNextlineMargin, line, "PWD_NEXTLINE_MARGIN");
+  setPattern(&config->pwdShowDirPrefix, line, "PWD_SHOW_DIR_PREFIX");
+  
 }
 
 void readData(PtShConfig *config, char* path)
@@ -111,23 +119,7 @@ void readData(PtShConfig *config, char* path)
 
 PtShConfig *readConfig()
 {
-  PtShConfig *config = (PtShConfig*)malloc(sizeof(PtShConfig));
-  config->dirPrefix = NULL;
-  config->filePrefix = NULL;
-  config->linkPrefix = NULL;
-  config->errorPrefix = NULL;
-  config->successPrefix = NULL;
-  config->successMessage = NULL;
-  config->dirPrefixEscapeCodes = NULL;
-  config->filePrefixEscapeCodes = NULL;
-  config->linkPrefixEscapeCodes = NULL;
-  config->dirNameEscapeCodes = NULL;
-  config->fileNameEscapeCodes = NULL;
-  config->linkNameEscapeCodes = NULL;
-  config->errorPrefixEscapeCodes = NULL;
-  config->errorMessageEscapeCodes = NULL;
-  config->successPrefixEscapeCodes = NULL;
-  config->successMessageEscapeCodes = NULL;
+  PtShConfig *config = (PtShConfig*)calloc(1, sizeof(PtShConfig));
 
   char* homePath = getenv("HOME");
   char* defaultPath = (char*)calloc(1,strlen(homePath) + strlen(DEFAULT_CONFIG_PATH) +1);
@@ -165,6 +157,10 @@ void closeConfig(PtShConfig *config)
   free(config->errorMessageEscapeCodes);
   free(config->successPrefixEscapeCodes);
   free(config->successMessageEscapeCodes);
+  free(config->pwdDirSeparator);
+  free(config->pwdDirSeparatorEscapeCodes);
+  free(config->pwdNextline);
+  free(config->pwdNextlineMargin);
   free(config);
 }
 

@@ -26,6 +26,13 @@ typedef struct PtShConfig_{
   char* errorMessageEscapeCodes;
   char* successPrefixEscapeCodes;
   char* successMessageEscapeCodes;
+
+  //ptpwd
+  char* pwdDirSeparator;
+  char* pwdDirSeparatorEscapeCodes;
+  char* pwdNextline;
+  char* pwdNextlineMargin;
+  char* pwdShowDirPrefix;
 } PtShConfig;
 
 typedef enum FileType_{
@@ -42,6 +49,9 @@ typedef struct FileConfigValues_{
 
 PtShConfig *readConfig();
 void closeConfig(PtShConfig *config);
+
+char *getValueStr(char* field);
+int getValueInt(char* field);
 
 FileConfigValues *getFileConfigValues(PtShConfig *config, FileType type);
 
