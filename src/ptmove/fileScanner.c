@@ -15,34 +15,6 @@ void removeSlash(char ** val)
 
 void addFile(Args *args, PtShConfig *config, MoveData *data, char *source, char *dest)
 {
-  char path[PATH_MAX+1];
-  realpath(source, path);
-
-  struct stat stats;
-  stat(path, &stats);
-
-  if(args->interactive)
-  {
-    FileType type = FT_File;
-    if(S_ISLNK(stats.st_mode))
-      type = FT_Link;
-
-    FileConfigValues *fcv = getFileConfigValues(config, type);
-    printf("\r%c[2K", 27); 
-    printf("%s%s\x1b[0m%s", fcv->prefixEscapeCodes, fcv->prefix, fcv->nameEscapeCodes);
-    printf("%s", source);
-    printf("\x1b[0m (y/n)\n\b");
-
-    free(fcv);
-
-    char c;
-    do
-      c = getchar();
-    while(c != 'y' && c != 'n');
-
-    if(c == 'n') return;
-  }
-
   if(data->files == NULL)
     data->files = calloc(1, sizeof(FilePaths*));
   else
@@ -54,6 +26,12 @@ void addFile(Args *args, PtShConfig *config, MoveData *data, char *source, char 
 
   (*filePtr)->sourcePath = source;
   (*filePtr)->destPath = dest;
+  
+  char path[PATH_MAX+1];
+  realpath(source, path);
+
+  struct stat stats;
+  stat(path, &stats);
 
   data->totalBytes += stats.st_size;
 

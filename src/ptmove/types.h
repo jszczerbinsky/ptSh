@@ -22,6 +22,7 @@ typedef struct Subdir_{
 typedef struct FilePaths_{
   char *sourcePath;
   char *destPath;
+  bool ignore;
 } FilePaths;
 
 typedef struct MoveData_{

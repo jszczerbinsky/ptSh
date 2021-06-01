@@ -27,6 +27,8 @@ int main(int argc, char **argv)
     return 1;
   }
 
+  selectFiles(config, mData);
+
   printf("%ld bytes\n", mData->totalBytes);
   printf("%d\n", mData->fileCount);
 

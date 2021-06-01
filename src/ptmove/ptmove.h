@@ -18,4 +18,7 @@ void setProgressBar(int size, int percentage);
 //files.c
 void copyFiles(Args *args, MoveData *mData);
 
+//fileSelector.c
+void selectFiles(PtShConfig *config, MoveData *mData);
+
 #endif
