@@ -64,7 +64,8 @@ void copyFiles(Args *args, MoveData *mData)
   unsigned long actualByte = 0;
 
   for(int i = 0; i < mData->fileCount; i++)
-    copyFile(mData->files[i], w.ws_col, &actualByte, &mData->totalBytes);
+    if(!mData->files[i]->ignore)
+      copyFile(mData->files[i], w.ws_col, &actualByte, &mData->totalBytes);
 
   setProgressBar(w.ws_col, 100);
   printf("\n");

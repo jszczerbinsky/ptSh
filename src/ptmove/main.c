@@ -33,7 +33,7 @@ int main(int argc, char **argv)
   printf("%d\n", mData->fileCount);
 
   copyFiles(args, mData);
-  
+ 
   tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
 
   closeConfig(config);
