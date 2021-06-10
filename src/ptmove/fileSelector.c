@@ -23,7 +23,6 @@ void displayFile(PtShConfig *config, FilePaths *fPaths, unsigned int cols, bool 
   FileConfigValues *fcv = getFileConfigValues(config, type);
   printf("%c[2K", 27); 
   printf("%s%s%s\x1b[0m%s%s", selectedPrefix, fcv->prefixEscapeCodes, fcv->prefix, selectedPrefix, fcv->nameEscapeCodes);
-  printf("%s\x1b[0m%s", fPaths->sourcePath, selectedPrefix);
 
   unsigned int actualChar = strlen(fcv->prefix) + strlen(fPaths->sourcePath);
 
@@ -35,8 +34,28 @@ void displayFile(PtShConfig *config, FilePaths *fPaths, unsigned int cols, bool 
     fileStatusEC = getValueStr(config->errorPrefixEscapeCodes);
   }
 
-  for(int i = 0; i < cols - actualChar - strlen(fileStatus); i++)
-    printf(" ");
+  unsigned int lineChars = strlen(fcv->prefix) + strlen(fPaths->sourcePath) + strlen(fileStatus);
+
+  if(lineChars > cols)
+  {
+    unsigned int length = strlen(fPaths->sourcePath) - (lineChars-cols)-2;
+
+    char * buff = calloc(length+3, sizeof(char));
+    snprintf(buff, length, "%s", fPaths->sourcePath);
+    strcat(buff, "...");
+    printf("%s", buff);
+    free(buff);
+  }
+  else
+  {
+    printf("%s", fPaths->sourcePath);
+  }
+
+  printf("\x1b[0m%s", selectedPrefix);
+
+  if(lineChars <= cols)
+    for(int i = 0; i < cols - actualChar - strlen(fileStatus); i++)
+      printf(" ");
 
   printf("%s%s", fileStatusEC, fileStatus);
 
