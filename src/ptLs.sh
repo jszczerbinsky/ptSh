@@ -15,15 +15,12 @@ function getColumnSize(){
 }
 
 function setArgs(){
-    if [[ $1 != "-"* ]] || [[ $1 == "-l" ]]; then
-        arg=""
-        return 0
-    fi
-    if [[ $1 == *"a"* ]]; then
+    if [[ $1 == "-a"* ]]; then
         arg="${arg}a"
-    fi
-    if [[ $1 == *"A"* ]]; then
+    elif [[ $1 == "-A"* ]]; then
         arg="${arg}A"
+    elif [[ $1 == "-"* ]] || [[ $1 == "-l" ]]; then
+        arg=""
     fi
 }
 
@@ -34,13 +31,22 @@ function align(){
 }
 
 arg=""
+path=""
 setArgs $1
 
-if [[ ! -z $arg ]];
-    then a=$arg
+# Use path/file if exists + the flag
+if [[ ! -z $arg ]] && [[ ! -z $2 ]];
+then a=$arg
+    path=$2
 fi
 
-LS="$(ls -Ql$arg --group-directories-first --time-style=+"" 2>/dev/null)"
+# Use path/file if exists wihout the flag
+if [[ $1 != "-"* ]] && [[ ! -z $1 ]];
+then
+    path=$1
+fi
+
+LS="$(ls -Ql$arg $path --group-directories-first --time-style=+"" 2>/dev/null)"
 
 getColumnSize
 
@@ -62,7 +68,6 @@ while read -r line; do
     if [[ $(echo $line | wc -w) == 2 ]]; then continue; fi
 
     link=false
-
     if [[ ${words[0]} == "d"* ]]; then
         filename="${DIR_PREFIX_ESCAPE_CODES}${DIR_PREFIX}\x1B[0m${DIR_NAME_ESCAPE_CODES}"
         prefixLength=${#DIR_PREFIX}
@@ -70,6 +75,9 @@ while read -r line; do
         filename="${LINK_PREFIX_ESCAPE_CODES}${LINK_PREFIX}\x1B[0m${LINK_NAME_ESCAPE_CODES}"
         prefixLength=${#LINK_PREFIX}
         link=true
+    elif [[ -z ${words[0]} ]]; then
+        echo "No such file or directory"
+        exit 1
     else
         filename="${FILE_PREFIX_ESCAPE_CODES}${FILE_PREFIX}\x1B[0m${FILE_NAME_ESCAPE_CODES}"
         prefixLength=${#FILE_PREFIX}
