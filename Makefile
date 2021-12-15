@@ -4,7 +4,6 @@ all:
 	@echo Run \'make install\'
 
 install:
-	git rev-parse --short HEAD > $(ver)
 	mkdir -p ~/.local/share/ptSh
 	cp src/config ~/.local/share/ptSh/config
 	mkdir -p ~/.local/bin
@@ -16,6 +15,7 @@ install:
 	cp src/ptMkdir.sh ~/.local/bin/ptmkdir
 	cp src/ptTouch.sh ~/.local/bin/pttouch
 	cp src/ptCp.sh ~/.local/bin/ptcp
+	cp src/ptMv.sh ~/.local/bin/ptmv
 	cp src/ptRm.sh ~/.local/bin/ptrm
 	cp src/ptsh.sh ~/.local/bin/ptsh
 	mkdir -p ~/.config
@@ -34,5 +34,6 @@ uninstall:
 	rm ~/.local/bin/ptmkdir
 	rm ~/.local/bin/pttouch
 	rm ~/.local/bin/ptcp
+	rm ~/.local/bin/ptmv
 	rm ~/.local/bin/ptrm
 	rm ~/.local/bin/ptsh
