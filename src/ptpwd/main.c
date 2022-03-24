@@ -1,5 +1,5 @@
 #include <linux/limits.h>
-#include <ptsh.h>
+#include "../libptsh/ptsh.h"
 #include <stdio.h>
 #include <string.h>
 
