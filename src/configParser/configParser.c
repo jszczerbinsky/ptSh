@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "ptsh.h"
+#include "configParser.h"
 
 #define DEFAULT_CONFIG_PATH "/.local/share/ptSh/config"
 #define CONFIG_PATH "/.config/ptSh/config"
