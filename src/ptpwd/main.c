@@ -1,12 +1,12 @@
 #include <linux/limits.h>
-#include <ptsh.h>
+#include "../libptsh/ptsh.h"
 #include <stdio.h>
 #include <string.h>
 
 #include "argDefs.h"
 #include "ptpwd.h"
 
-void printHelpLine(const char* arg, const char* argw, const char* desc)
+void printHelpLine(const char arg, const char* argw, const char* desc)
 {
   const int argwColSize = 20;
   printf("     ");
