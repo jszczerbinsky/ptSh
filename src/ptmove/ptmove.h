@@ -1,7 +1,7 @@
 #ifndef PTMOVE_H
 #define PTMOVE_H
 
-#include "../libptsh/ptsh.h"
+#include "../configParser/configParser.h"
 #include "types.h"
 
 //argParser.c
