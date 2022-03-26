@@ -161,5 +161,6 @@ void selectFiles(PtShConfig *config, MoveData *mData)
     stat(mData->files[i]->sourcePath, &stats);
 
     mData->totalBytes -= stats.st_size;
+    mData->ignoredCount++;
   }
 }

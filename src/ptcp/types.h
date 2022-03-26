@@ -28,6 +28,7 @@ typedef struct FilePaths_{
 typedef struct MoveData_{
   FilePaths **files;
   int fileCount;
+  int ignoredCount;
   Subdir **subdirs;
   int subdirCount;
   unsigned long totalBytes;

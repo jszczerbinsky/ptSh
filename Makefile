@@ -4,6 +4,7 @@ all:
 	@echo Run \'make install\'
 
 install:
+	git rev-parse --short HEAD > $(ver)
 	mkdir -p ~/.local/share/ptSh
 	mkdir -p ~/.local/bin
 	mkdir -p build
@@ -19,6 +20,8 @@ install:
 	mkdir -p ~/.config
 	mkdir -p ~/.config/ptSh
 	cp src/config ~/.config/ptSh/config
+	echo "Version: cloned from " | tee ~/.local/share/ptSh/version.txt
+	cat $(ver) | tee -a ~/.local/share/ptSh/version.txt
 	~/.local/bin/ptsh
 
 uninstall:

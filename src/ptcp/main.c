@@ -44,7 +44,7 @@ int main(int argc, char **argv)
   char buff[25];
   printSize(buff, 25, mData->totalBytes, args->decimalSize);
 
-  printf("Copying %d files (%s)", mData->fileCount, buff);
+  printf("Copying %d files (%s)", mData->fileCount-mData->ignoredCount, buff);
 
   copyFiles(config, args, mData);
  
