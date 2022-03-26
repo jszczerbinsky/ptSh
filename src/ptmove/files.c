@@ -42,7 +42,10 @@ void copyFile(FilePaths *paths, int progressBarSize, unsigned long *actualByte, 
       fwrite(buff, sizeof(unsigned char), readCount, dest); 
 
       (*actualByte) += readCount * sizeof(unsigned char);
-      setProgressBar(progressBarSize, (100*(*actualByte))/(*totalBytes));
+      if(*totalBytes)
+        setProgressBar(progressBarSize, (100*(*actualByte))/(*totalBytes));
+      else
+        setProgressBar(progressBarSize, 100);
 
     } while(readCount == buffSize);
 

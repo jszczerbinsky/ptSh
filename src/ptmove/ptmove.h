@@ -14,6 +14,7 @@ void freeMoveData(MoveData *data);
 
 //display.c
 void setProgressBar(int size, int percentage);
+void displayHelp();
 
 //files.c
 void copyFiles(Args *args, MoveData *mData);

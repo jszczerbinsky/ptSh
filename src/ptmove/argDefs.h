@@ -1,10 +1,6 @@
 #ifndef PTMOVE_ARG_DEFS
 #define PTMOVE_ARG_DEFS
 
-#define COPY_ARG 'c'
-#define COPY_ARG_W "--copy"
-#define COPY_ARG_DESC ""
-
 #define RECURSIVE_ARG 'r'
 #define RECURSIVE_ARG_W "--recursive"
 #define RECURSIVE_ARG_DESC ""
@@ -16,5 +12,9 @@
 #define UPDATE_ARG 'u'
 #define UPDATE_ARG_W "--update"
 #define UPDATE_ARG_DESC ""
+
+#define HELP_ARG               ' '
+#define HELP_ARG_W             "--help"
+#define HELP_ARG_DESC          ""
 
 #endif

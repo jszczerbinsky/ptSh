@@ -10,6 +10,12 @@ int main(int argc, char **argv)
   Args *args = parseArgs(argc, argv);
   if(args->sourcePath == NULL || args->destPath == NULL) return 1;
 
+  if(args->help)
+  {
+    displayHelp();
+    return 0;
+  }
+
   PtShConfig *config = readConfig();
   
   struct termios oldt, newt;
@@ -27,7 +33,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  selectFiles(config, mData);
+  if(args->interactive) selectFiles(config, mData);
 
   printf("%ld bytes\n", mData->totalBytes);
   printf("%d\n", mData->fileCount);
