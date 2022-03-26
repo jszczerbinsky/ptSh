@@ -7,6 +7,7 @@
 typedef struct Args_{
   bool recursive;
   bool interactive;
+  bool decimalSize;
   bool help;
   char **sourcePath;
   int sourcePathCount;

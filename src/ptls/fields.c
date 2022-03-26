@@ -20,39 +20,13 @@ void setSize(Fields *fields, File *file, Args *args, ColumnSizes *cSize)
     strcpy(fields->size, "-");
     return;
   }
-  int precission = 1;
 
-  float size = file->stats->st_size;
-  int divider = (args->decimalSize) ? 1000 : 1024;
-  char *unit = "B";
+  char buff[25];
+  int length = printSize(buff, 25, file->stats->st_size, args->decimalSize);
 
-  if(!args->fullSize)
-  {
-    if(size > divider)
-    {
-      size /= divider;
-      unit = (args->decimalSize) ? "KB" : "KiB";
-    } else precission = -1;
-    if(size > divider)
-    {
-      size /= divider;
-      unit = (args->decimalSize) ? "MB" : "MiB";
-    } 
-    if(size > divider)
-    {
-      size /= divider;
-      unit = (args->decimalSize) ? "GB" : "GiB";
-    } 
-  } else precission = -1;
-  
-  int digits = getIntDigits(size) + precission + 2; 
+  fields->size = strdup(buff);
 
-  fields->size = calloc(digits+strlen(unit)+2, sizeof(char));
-  snprintf(fields->size, digits, "%f", size);
-  strcat(fields->size, " ");
-  strcat(fields->size, unit);
-  if(digits + strlen(unit) > cSize->size) cSize->size = digits + strlen(unit);
-
+  if(length > cSize->size) cSize->size = length;
 }
 
 void setHardlinks(Fields *fields, File *file, Args *args, ColumnSizes *cSize)

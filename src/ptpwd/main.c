@@ -1,6 +1,6 @@
 #include <linux/limits.h>
 #include "../common/configParser.h"
-#include "../common/help.h"
+#include "../common/display.h"
 #include <stdio.h>
 #include <string.h>
 

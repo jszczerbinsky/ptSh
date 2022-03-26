@@ -19,7 +19,7 @@ void createSubdirs(Args *args, MoveData *mData)
   } 
 }
 
-void copyFile(FilePaths *paths, int progressBarSize, unsigned long *actualByte, unsigned long* totalBytes)
+void copyFile(const PtShConfig *config, FilePaths *paths, int progressBarSize, unsigned long *actualByte, unsigned long* totalBytes)
 {
 
   struct stat stats;
@@ -42,10 +42,7 @@ void copyFile(FilePaths *paths, int progressBarSize, unsigned long *actualByte, 
       fwrite(buff, sizeof(unsigned char), readCount, dest); 
 
       (*actualByte) += readCount * sizeof(unsigned char);
-      if(*totalBytes)
-        setProgressBar(progressBarSize, (100*(*actualByte))/(*totalBytes));
-      else
-        setProgressBar(progressBarSize, 100);
+      setProgressBar(config, progressBarSize, (100*(*actualByte))/(*totalBytes));
 
     } while(readCount == buffSize);
 
@@ -56,20 +53,28 @@ void copyFile(FilePaths *paths, int progressBarSize, unsigned long *actualByte, 
   chmod(paths->destPath, stats.st_mode);
 }
 
-void copyFiles(Args *args, MoveData *mData)
+void copyFiles(const PtShConfig *config, Args *args, MoveData *mData)
 {
+  if(mData->totalBytes == 0)
+  {
+    printMessage(config, "Nothing to do", false);
+    return;
+  }
+
   struct winsize w;
   ioctl(0, TIOCGWINSZ, &w);
 
-  setProgressBar(w.ws_col, 0);
+  printf("\n\n");
+  setProgressBar(config, w.ws_col, 0);
 
   createSubdirs(args, mData);
   unsigned long actualByte = 0;
 
   for(int i = 0; i < mData->fileCount; i++)
     if(!mData->files[i]->ignore)
-      copyFile(mData->files[i], w.ws_col, &actualByte, &mData->totalBytes);
+      copyFile(config, mData->files[i], w.ws_col, &actualByte, &mData->totalBytes);
 
-  setProgressBar(w.ws_col, 100);
+  setProgressBar(config, w.ws_col, 100);
   printf("\n");
+  printMessage(config, "Done", false);
 }

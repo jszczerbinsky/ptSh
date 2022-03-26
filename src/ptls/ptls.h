@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include "../common/configParser.h"
-#include "../common/help.h"
+#include "../common/display.h"
 #include "types.h"
 
 #ifndef PTLS_H

@@ -15,9 +15,14 @@ int main(int argc, char **argv)
     return 0;
   }
 
-  if(args->sourcePath == NULL || args->destPath == NULL) return 1;
-
   PtShConfig *config = readConfig();
+
+  if(args->sourcePath == NULL || args->destPath == NULL)
+  {
+    printMessage(config, "You must specify source and destination path", true);
+    closeConfig(config);
+    return 1;
+  }
   
   struct termios oldt, newt;
   
@@ -30,15 +35,18 @@ int main(int argc, char **argv)
   if(mData == NULL)
   {
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    closeConfig(config);
     return 1;
   }
 
   if(args->interactive) selectFiles(config, mData);
 
-  printf("%ld bytes\n", mData->totalBytes);
-  printf("%d\n", mData->fileCount);
+  char buff[25];
+  printSize(buff, 25, mData->totalBytes, args->decimalSize);
 
-  copyFiles(args, mData);
+  printf("Copying %d files (%s)", mData->fileCount, buff);
+
+  copyFiles(config, args, mData);
  
   tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
 

@@ -10,10 +10,11 @@ void displayHelp()
   printf("\nArguments:\n");
   printHelpLine(HELP_ARG, HELP_ARG_W, HELP_ARG_DESC);
   printHelpLine(RECURSIVE_ARG, RECURSIVE_ARG_W, RECURSIVE_ARG_DESC);
+  printHelpLine(DECIMAL_SIZE_ARG, DECIMAL_SIZE_ARG_W, DECIMAL_SIZE_ARG_DESC);
   printHelpLine(INTERACTIVE_ARG, INTERACTIVE_ARG_W, INTERACTIVE_ARG_DESC);
 }
 
-void setProgressBar(int size, int percentage)
+void setProgressBar(const PtShConfig *config, int size, int percentage)
 {
   if(percentage > 100) percentage = 100;
   size -= 3;
@@ -25,7 +26,15 @@ void setProgressBar(int size, int percentage)
   int strPos = size/2-2;
 
   printf("\b\r");
-  printf("\x1b[40m[\x1b[0m\x1b[45m");
+
+  if(config->cpProgressBarBorderEscapeCodes)
+    printf("%s", config->cpProgressBarBorderEscapeCodes);
+
+  printf("[\x1b[0m");
+
+  if(config->cpProgressBarEscapeCodes)
+    printf("%s", config->cpProgressBarEscapeCodes);
+
   for(int x = 0; x < size; x++)
   {
     if(x == blocks)
@@ -36,7 +45,12 @@ void setProgressBar(int size, int percentage)
     else
       printf(" ");
   }
-  printf("\x1b[40m]\x1b[0m ");
+
+  if(config->cpProgressBarBorderEscapeCodes)
+    printf("%s", config->cpProgressBarBorderEscapeCodes);
+
+  printf("]\x1b[0m ");
+
   fflush(stdout);
 
   free(percentageStr);

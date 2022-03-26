@@ -173,12 +173,13 @@ MoveData *copyToDir(Args *args, PtShConfig *config)
   return data;
 }
 
-MoveData *copyToFile(Args *args)
+MoveData *copyToFile(const PtShConfig *config, Args *args)
 {
   struct stat *stats = calloc(1, sizeof(struct stat));
 
   if(stat(args->sourcePath[0], stats) != 0)
   {
+    printMessage(config, "Source file doesn't exist", true);
     free(stats);
     return NULL;
   }
@@ -196,6 +197,7 @@ MoveData *copyToFile(Args *args)
   strcpy(data->files[0]->destPath, args->destPath);
 
   free(stats);
+
   return data;
 }
 
@@ -211,6 +213,7 @@ MoveData *getMoveData(Args *args, PtShConfig *config)
     if(srcdir && !args->recursive)
     {
       closedir(srcdir);
+      printMessage(config, "To copy a directory, You must use 'recursive' flag", true);
       return NULL;
     }
 
@@ -221,11 +224,13 @@ MoveData *getMoveData(Args *args, PtShConfig *config)
     if(srcdir)
     {
       closedir(srcdir);
+      printMessage(config, "Destination directory doesn't exist", true);
       return NULL;
     }
-    return copyToFile(args);
+    return copyToFile(config, args);
   }
 
+  printMessage(config, "Destination directory doesn't exist", true);
   return NULL;
 }
 

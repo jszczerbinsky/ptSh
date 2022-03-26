@@ -14,6 +14,9 @@ void getCharArgs(Args* args, char* str){
       case INTERACTIVE_ARG:
         args->interactive = true;
         break;
+      case DECIMAL_SIZE_ARG:
+        args->decimalSize = true;
+        break;
     }
   }
 }
@@ -23,6 +26,7 @@ void getWordArg(Args *args, char* str)
   if(strcmp(str, RECURSIVE_ARG_W) == 0) args->recursive = true;
   else if(strcmp(str, INTERACTIVE_ARG_W) == 0) args->interactive = true;
   else if(strcmp(str, HELP_ARG_W) == 0) args->help = true;
+  else if(strcmp(str, DECIMAL_SIZE_ARG_W) == 0) args->decimalSize = true;
 }
 
 Args *parseArgs(int argc, char **argv)

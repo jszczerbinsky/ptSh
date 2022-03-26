@@ -2,7 +2,7 @@
 #define PTCP_H
 
 #include "../common/configParser.h"
-#include "../common/help.h"
+#include "../common/display.h"
 #include "types.h"
 
 //argParser.c
@@ -14,11 +14,11 @@ MoveData *getMoveData(Args *args, PtShConfig *config);
 void freeMoveData(MoveData *data);
 
 //display.c
-void setProgressBar(int size, int percentage);
+void setProgressBar(const PtShConfig *config, int size, int percentage);
 void displayHelp();
 
 //files.c
-void copyFiles(Args *args, MoveData *mData);
+void copyFiles(const PtShConfig *config, Args *args, MoveData *mData);
 
 //fileSelector.c
 void selectFiles(PtShConfig *config, MoveData *mData);
