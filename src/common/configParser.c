@@ -101,7 +101,8 @@ void parseLine(PtShConfig *config, char* line)
   setPattern(&config->pwdNextline, line, "PWD_NEXTLINE");
   setPattern(&config->pwdNextlineMargin, line, "PWD_NEXTLINE_MARGIN");
   setPattern(&config->pwdShowDirPrefix, line, "PWD_SHOW_DIR_PREFIX");
-  
+  setPattern(&config->cpProgressBarBorderEscapeCodes, line, "CP_PROGRESSBAR_BORDER_ESCAPE_CODES");
+  setPattern(&config->cpProgressBarEscapeCodes, line, "CP_PROGRESSBAR_ESCAPE_CODES");
 }
 
 void readData(PtShConfig *config, char* path)
@@ -161,6 +162,8 @@ void closeConfig(PtShConfig *config)
   free(config->pwdDirSeparatorEscapeCodes);
   free(config->pwdNextline);
   free(config->pwdNextlineMargin);
+  free(config->cpProgressBarBorderEscapeCodes);
+  free(config->cpProgressBarEscapeCodes);
   free(config);
 }
 

@@ -1,7 +1,7 @@
 #include <sys/stat.h>
 
-#ifndef PTSH_H
-#define PTSH_H
+#ifndef COMMON_CONFIG_PARSER_H
+#define COMMON_CONFIG_PARSER_H
 
 typedef struct PtShConfig_{
   
@@ -33,6 +33,10 @@ typedef struct PtShConfig_{
   char* pwdNextline;
   char* pwdNextlineMargin;
   char* pwdShowDirPrefix;
+
+  //ptcp
+  char* cpProgressBarBorderEscapeCodes;
+  char* cpProgressBarEscapeCodes;
 } PtShConfig;
 
 typedef enum FileType_{

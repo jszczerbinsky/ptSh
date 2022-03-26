@@ -47,8 +47,14 @@ LS_MIN_FILE_OFFSET='5'                        # Offset between displayed files/d
 #
 # Options for ptpwd script
 #
-PWD_DIR_SEPARATOR='└ '                         # Separator between directories
+PWD_DIR_SEPARATOR='└ '                        # Separator between directories
 PWD_DIR_SEPARATOR_ESCAPE_CODES=''             # Escape codes for directory separator 
 PWD_NEXTLINE='1'                              # Display directories in next lines
 PWD_NEXTLINE_MARGIN='2'                       # Left margin increment for next lines (can be 0 as well)
 PWD_SHOW_DIR_PREFIX='1'                       # Display directory prefixes 
+
+#
+# Options for ptcp script
+#
+CP_PROGRESSBAR_BORDER_ESCAPE_CODES='\x1B[40m' # Escape codes for progressbar border
+CP_PROGRESSBAR_ESCAPE_CODES='\x1B[45m'        # Escape codes for progressbar

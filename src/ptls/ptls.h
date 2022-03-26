@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
-#include "../configParser/configParser.h"
+#include "../common/configParser.h"
+#include "../common/display.h"
 #include "types.h"
 
 #ifndef PTLS_H
