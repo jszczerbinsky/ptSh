@@ -3,18 +3,19 @@
 #include <stdio.h>
 #include <termios.h>
 
-#include "ptmove.h"
+#include "ptcp.h"
 
 int main(int argc, char **argv)
 {
   Args *args = parseArgs(argc, argv);
-  if(args->sourcePath == NULL || args->destPath == NULL) return 1;
 
   if(args->help)
   {
     displayHelp();
     return 0;
   }
+
+  if(args->sourcePath == NULL || args->destPath == NULL) return 1;
 
   PtShConfig *config = readConfig();
   
@@ -28,7 +29,6 @@ int main(int argc, char **argv)
   MoveData *mData = getMoveData(args, config); 
   if(mData == NULL)
   {
-    printf("NULL");
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
     return 1;
   }

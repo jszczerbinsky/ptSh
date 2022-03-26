@@ -1,14 +1,12 @@
-#ifndef PTMOVE_TYPES_H
-#define PTMOVE_TYPES_H
+#ifndef PTCP_TYPES_H
+#define PTCP_TYPES_H
 
 #include <stdbool.h>
 #include <sys/stat.h>
 
 typedef struct Args_{
-  bool copy;
   bool recursive;
   bool interactive;
-  bool update;
   bool help;
   char **sourcePath;
   int sourcePathCount;

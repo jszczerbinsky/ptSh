@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ptmove.h"
+#include "ptcp.h"
 
 void displayFile(PtShConfig *config, FilePaths *fPaths, unsigned int cols, bool selected)
 {

@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <linux/limits.h>
 
-#include "ptmove.h"
+#include "ptcp.h"
 
 void removeSlash(char ** val)
 {
@@ -119,23 +119,27 @@ MoveData *copyToDir(Args *args, PtShConfig *config)
     DIR *sourceDir = opendir(sourcePath);
     if(sourceDir)
     {
-      char *subPath = calloc(strlen(sourcePath) +2, sizeof(char));
-      strcpy(subPath, sourcePath);
-      strcat(subPath, "/");
-
-      int ignoreDestSubPath = 1;
-      char *ptr = subPath+strlen(subPath)-2;
-      while(*ptr != '/' && ptr != subPath-1) 
+      if(args->recursive)
       {
-        ptr--;
-        ignoreDestSubPath++;
+        char *subPath = calloc(strlen(sourcePath) +2, sizeof(char));
+        strcpy(subPath, sourcePath);
+        strcat(subPath, "/");
+
+        int ignoreDestSubPath = 1;
+        char *ptr = subPath+strlen(subPath)-2;
+        while(*ptr != '/' && ptr != subPath) 
+        {
+          ptr--;
+          ignoreDestSubPath++;
+        }
+        if(ptr != subPath) ptr++;
+        else ignoreDestSubPath++;
+
+        scanSubdir(args, config, sourceDir, data, subPath, ignoreDestSubPath); 
+
+        free(subPath);
+
       }
-      ptr++;
-
-      scanSubdir(args, config, sourceDir, data, subPath, ignoreDestSubPath); 
-
-      free(subPath);
-
       closedir(sourceDir);
       continue;
     }
@@ -202,16 +206,26 @@ MoveData *getMoveData(Args *args, PtShConfig *config)
   if(dir)
   {
     closedir(dir);
-    return copyToDir(args, config);
-  }else
-  {
-    FILE *file = fopen(args->destPath, "w");
-    if(file != NULL)
+
+    DIR *srcdir = opendir(args->sourcePath[0]);
+    if(srcdir && !args->recursive)
     {
-      fclose(file);
-      return copyToFile(args);
-    } 
+      closedir(srcdir);
+      return NULL;
+    }
+
+    return copyToDir(args, config);
+  }else if(args->sourcePathCount == 1)
+  {
+    DIR *srcdir = opendir(args->sourcePath[0]);
+    if(srcdir)
+    {
+      closedir(srcdir);
+      return NULL;
+    }
+    return copyToFile(args);
   }
+
   return NULL;
 }
 

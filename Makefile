@@ -7,9 +7,9 @@ install:
 	mkdir -p ~/.local/share/ptSh
 	mkdir -p ~/.local/bin
 	mkdir -p build
-	gcc src/configParser/configParser.c src/ptls/*.c -lm -o build/ptls
-	gcc src/configParser/configParser.c src/ptpwd/*.c -lm -o build/ptpwd
-	gcc src/configParser/configParser.c src/ptmove/*.c -lm -o build/ptmove
+	gcc src/common/*.c src/ptls/*.c -lm -o build/ptls
+	gcc src/common/*.c src/ptpwd/*.c -lm -o build/ptpwd
+	gcc src/common/*.c src/ptcp/*.c -lm -o build/ptcp
 	cp build/* ~/.local/bin/
 	rm -rf build
 	cp src/config ~/.local/share/ptSh/config

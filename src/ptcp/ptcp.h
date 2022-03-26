@@ -1,7 +1,8 @@
-#ifndef PTMOVE_H
-#define PTMOVE_H
+#ifndef PTCP_H
+#define PTCP_H
 
-#include "../configParser/configParser.h"
+#include "../common/configParser.h"
+#include "../common/help.h"
 #include "types.h"
 
 //argParser.c

@@ -1,34 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "ptcp.h"
 #include "argDefs.h"
-
-void printHelpLine(const char arg, const char* argw, const char* desc)
-{
-  const int argwColSize = 20;
-  printf("     ");
-
-  if(arg == ' ')
-    printf("   ");
-  else
-    printf("-%c ", arg);
-
-  printf(" ");
-
-  printf("%s  ", argw);
-  for(int i = 0; i < argwColSize - strlen(argw); i++) printf(" ");
-  printf("%s\n", desc);
-
-}
 
 void displayHelp()
 {
-  printf("Syntax: ptmove [ARGS] [SOURCE] [DEST]\n");
+  printf("Syntax: ptcp [ARGS] [SOURCE] [DEST]\n");
   printf("\nArguments:\n");
   printHelpLine(HELP_ARG, HELP_ARG_W, HELP_ARG_DESC);
   printHelpLine(RECURSIVE_ARG, RECURSIVE_ARG_W, RECURSIVE_ARG_DESC);
   printHelpLine(INTERACTIVE_ARG, INTERACTIVE_ARG_W, INTERACTIVE_ARG_DESC);
-  printHelpLine(UPDATE_ARG, UPDATE_ARG_W, UPDATE_ARG_DESC);
 }
 
 void setProgressBar(int size, int percentage)
