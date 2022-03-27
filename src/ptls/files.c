@@ -1,8 +1,8 @@
 #include <dirent.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <linux/limits.h>
 #include "ptls.h"
+#include "../common/limits.h"
 
 DirContent *getFiles(Args *args)
 {

@@ -1,3 +1,4 @@
 *.out
 *.o
 *.a
+build/
