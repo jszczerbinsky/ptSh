@@ -73,7 +73,7 @@ void setPermissions(Fields *fields, File *file, Args *args)
     noGroupDecrease = 4;
 
   char *permStr = calloc(12-noGroupDecrease, sizeof(char));
-  __mode_t mode = file->stats->st_mode;
+  mode_t mode = file->stats->st_mode;
 
   permStr[0] = (mode & S_IRUSR) ?  'r' : '-';
   permStr[1] = (mode & S_IWUSR) ?  'w' : '-';
