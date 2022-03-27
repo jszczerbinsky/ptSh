@@ -4,7 +4,7 @@
 
 #include "configParser.h"
 
-#define DEFAULT_CONFIG_PATH "/.local/share/ptSh/config"
+#define DEFAULT_CONFIG_PATH "/usr/share/ptSh/config"
 #define CONFIG_PATH "/.config/ptSh/config"
 
 void setPattern(char** destination, char* line, const char* pattern)
@@ -123,18 +123,14 @@ PtShConfig *readConfig()
   PtShConfig *config = (PtShConfig*)calloc(1, sizeof(PtShConfig));
 
   char* homePath = getenv("HOME");
-  char* defaultPath = (char*)calloc(1,strlen(homePath) + strlen(DEFAULT_CONFIG_PATH) +1);
-  strcpy(defaultPath, homePath);
-  strcat(defaultPath, DEFAULT_CONFIG_PATH);
 
   char* path = (char*)calloc(1,strlen(homePath) + strlen(CONFIG_PATH) +1);
   strcpy(path, homePath);
   strcat(path, CONFIG_PATH);
 
-  readData(config, defaultPath);
+  readData(config, DEFAULT_CONFIG_PATH);
   readData(config, path);
 
-  free(defaultPath);
   free(path);
   
   return config;

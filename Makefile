@@ -1,33 +1,33 @@
-ver=/tmp/ptsh_ver
-
 all:
-	@echo Run \'make install\'
+	mkdir -p build
+	rm -rf build/*
+	mkdir -p build/bin
+	mkdir -p build/share
+	mkdir -p build/share/ptSh
+	gcc src/common/*.c src/ptls/*.c -lm -o build/bin/ptls
+	gcc src/common/*.c src/ptpwd/*.c -lm -o build/bin/ptpwd
+	gcc src/common/*.c src/ptcp/*.c -lm -o build/bin/ptcp
+	cp src/ptsh.sh build/bin/ptsh
+	cp src/config build/share/ptSh/config
+	cp LICENSE build/share/ptSh/LICENSE
+	cp src/logo.txt build/share/ptSh/logo.txt
+	git rev-parse --short HEAD > /tmp/ptsh_ver
+	echo "Version: cloned from " | tee build/share/ptSh/version.txt
+	cat /tmp/ptsh_ver | tee -a build/share/ptSh/version.txt
 
 install:
-	git rev-parse --short HEAD > $(ver)
-	mkdir -p ~/.local/share/ptSh
-	mkdir -p ~/.local/bin
-	mkdir -p build
-	gcc src/common/*.c src/ptls/*.c -lm -o build/ptls
-	gcc src/common/*.c src/ptpwd/*.c -lm -o build/ptpwd
-	gcc src/common/*.c src/ptcp/*.c -lm -o build/ptcp
-	cp build/* ~/.local/bin/
-	rm -rf build
-	cp src/config ~/.local/share/ptSh/config
-	cp LICENSE ~/.local/share/ptSh/LICENSE
-	cp src/logo.txt ~/.local/share/ptSh/logo.txt
-	cp src/ptsh.sh ~/.local/bin/ptsh
+	mkdir -p ~/.config
+	mkdir -p ~/.config/ptSh
+	sudo cp -R build/* /usr
 	mkdir -p ~/.config
 	mkdir -p ~/.config/ptSh
 	cp src/config ~/.config/ptSh/config
-	echo "Version: cloned from " | tee ~/.local/share/ptSh/version.txt
-	cat $(ver) | tee -a ~/.local/share/ptSh/version.txt
-	~/.local/bin/ptsh
+	/usr/bin/ptsh
 
 uninstall:
-	rm -rf ~/.local/share/ptSh
+	sudo rm -rf /usr/share/ptSh
 	rm -rf ~/.config/ptSh
-	rm ~/.local/bin/ptls
-	rm ~/.local/bin/ptpwd
-	rm ~/.local/bin/ptmove
-	rm ~/.local/bin/ptsh
+	sudo rm /usr/bin/ptls
+	sudo rm /usr/bin/ptpwd
+	sudo rm /usr/bin/ptcp
+	sudo rm /usr/bin/ptsh
