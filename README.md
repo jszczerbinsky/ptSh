@@ -1,12 +1,20 @@
-# ptSh
+![](/img/screenshot.png)
 
-ptSh are visualy configurable terminal utils.
+## What is ptSh?
 
-## Installation
+PtSh are visually customizable termianal utils. PtSh main purpose is to be pleasing to the eye and be as powerful as 
+the original coreutils. The conception of ptSh visual configuration is, that there is only one common config file for all
+utils. Because of this all ptSh utils will print errors, information about files, dirs etc. the same way.
 
-You can find all installation and configuration steps on [Wiki](https://github.com/jszczerbinsky/ptSh/wiki)
+## Available commands
+Note, that ptSh is still in beta release and it doesn't provide full functionality yet.
 
-## Screenshots
+| Command | Alternative for | Description |
+| :-- | :-- | :-- |
+| ptpwd | pwd | Shows path to current directory |
+| ptls | ls | Lists files in current directory |
+| ptcp | cp | Copies files or directories |
 
-![](/img/ptls.png)
-![](/img/ptpwd.png)
+## Installation and configuration
+
+To install and configure ptSh, follow the [Wiki](https://github.com/jszczerbinsky/ptSh/wiki).
