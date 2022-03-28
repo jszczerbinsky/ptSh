@@ -1,4 +1,4 @@
-#include <linux/limits.h>
+#include "../common/limits.h"
 #include "../common/configParser.h"
 #include "../common/display.h"
 #include <stdio.h>
