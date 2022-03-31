@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <sys/ioctl.h>
 #include <sys/stat.h>
-#include <linux/limits.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../common/limits.h"
 
 #include "ptcp.h"
 

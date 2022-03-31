@@ -3,7 +3,7 @@
 #include <sys/stat.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <linux/limits.h>
+#include "../common/limits.h"
 
 #include "ptcp.h"
 
@@ -154,7 +154,6 @@ MoveData *copyToDir(Args *args, PtShConfig *config)
       {
         ptr--;
       }
-      ptr++;
 
       char *dest = calloc(strlen(ptr)+2+strlen(args->destPath), sizeof(char));
       strcpy(dest, args->destPath);

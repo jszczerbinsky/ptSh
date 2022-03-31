@@ -1,3 +1,8 @@
+TAG=$(shell git describe --exact-match --tags 2>/dev/null)
+COMMIT=$(shell echo "cloned commit: " && git rev-parse --short HEAD 2>/dev/null)
+
+VER=$(or $(TAG),$(COMMIT))
+
 all:
 	mkdir -p build
 	rm -rf build/*
@@ -11,11 +16,10 @@ all:
 	cp src/config build/share/ptSh/config
 	cp LICENSE build/share/ptSh/LICENSE
 	cp src/logo.txt build/share/ptSh/logo.txt
-	git rev-parse --short HEAD > /tmp/ptsh_ver
-	echo "Version: cloned from " | tee build/share/ptSh/version.txt
-	cat /tmp/ptsh_ver | tee -a build/share/ptSh/version.txt
-
+	
 install:
+	echo "Version: " | tee build/share/ptSh/version.txt
+	echo $(VER) | tee -a build/share/ptSh/version.txt
 	mkdir -p ~/.config
 	mkdir -p ~/.config/ptSh
 	sudo cp -R build/* /usr
