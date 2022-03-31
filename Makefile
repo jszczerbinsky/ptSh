@@ -21,8 +21,8 @@ all:
 
 	
 install:
-	cp -R build/* /usr
-	/usr/bin/ptsh
+	cp -R build/* $(DESTDIR)/usr
+	$(DESTDIR)/usr/bin/ptsh
 
 uninstall:
 	rm -rf /usr/share/ptSh
