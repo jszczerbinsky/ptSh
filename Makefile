@@ -16,10 +16,11 @@ all:
 	cp src/config build/share/ptSh/config
 	cp LICENSE build/share/ptSh/LICENSE
 	cp src/logo.txt build/share/ptSh/logo.txt
-	
-install:
 	echo "Version: " | tee build/share/ptSh/version.txt
 	echo $(VER) | tee -a build/share/ptSh/version.txt
+
+	
+install:
 	mkdir -p ~/.config
 	mkdir -p ~/.config/ptSh
 	sudo cp -R build/* /usr
