@@ -16,22 +16,17 @@ all:
 	cp src/config build/share/ptSh/config
 	cp LICENSE build/share/ptSh/LICENSE
 	cp src/logo.txt build/share/ptSh/logo.txt
-	
-install:
 	echo "Version: " | tee build/share/ptSh/version.txt
 	echo $(VER) | tee -a build/share/ptSh/version.txt
-	mkdir -p ~/.config
-	mkdir -p ~/.config/ptSh
-	sudo cp -R build/* /usr
-	mkdir -p ~/.config
-	mkdir -p ~/.config/ptSh
-	cp src/config ~/.config/ptSh/config
+
+	
+install:
+	cp -R build/* /usr
 	/usr/bin/ptsh
 
 uninstall:
-	sudo rm -rf /usr/share/ptSh
-	rm -rf ~/.config/ptSh
-	sudo rm /usr/bin/ptls
-	sudo rm /usr/bin/ptpwd
-	sudo rm /usr/bin/ptcp
-	sudo rm /usr/bin/ptsh
+	rm -rf /usr/share/ptSh
+	rm /usr/bin/ptls
+	rm /usr/bin/ptpwd
+	rm /usr/bin/ptcp
+	rm /usr/bin/ptsh
