@@ -49,11 +49,8 @@ int main(int argc, char** argv)
 
   for(int i = 0; i < dirContent->fileCount; i++)
   {
-    if(fileVisible(dirContent->files[i], args))
-    {
-      printSize++;
-      if(S_ISDIR(dirContent->files[i]->stats->st_mode)) dirCount++;
-    }
+    if(fileVisible(dirContent->files[i], args)) printSize++;
+    if(S_ISDIR(dirContent->files[i]->stats->st_mode)) dirCount++;
   }
 
   PtShConfig *config = readConfig();
