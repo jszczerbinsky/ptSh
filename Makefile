@@ -25,11 +25,12 @@ all:
 	
 install:
 	cp -R build/* /usr
-	/usr/bin/ptsh
+	$(DESTDIR)/usr/bin/ptsh
 
 uninstall:
-	rm -rf /usr/share/ptSh
-	rm /usr/bin/ptls
-	rm /usr/bin/ptpwd
-	rm /usr/bin/ptcp
-	rm /usr/bin/ptsh
+	rm -rf $(DESTDIR)/usr/share/ptSh
+	rm $(DESTDIR)/usr/bin/ptls
+	rm $(DESTDIR)/usr/bin/ptpwd
+	rm $(DESTDIR)/usr/bin/ptcp
+	rm $(DESTDIR)/usr/bin/ptsh
+	rm -rf $(DESTDIR)/usr/share/licenses/ptSh
