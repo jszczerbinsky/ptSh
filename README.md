@@ -1,3 +1,6 @@
+[![](https://img.shields.io/github/downloads/jszczerbinsky/ptSh/total.svg)](https://github.com/jszczerbinsky/ptSh/releases/latest)
+[![](https://img.shields.io/aur/version/ptsh)](https://aur.archlinux.org/packages/ptsh)
+
 ![](/img/screenshot.png)
 
 ## What is ptSh?
