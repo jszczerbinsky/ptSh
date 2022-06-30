@@ -24,7 +24,7 @@ all:
 
 	
 install:
-	cp -R build/* /usr
+	cp -R build/* $(DESTDIR)/usr
 	$(DESTDIR)/usr/bin/ptsh
 
 uninstall:
