@@ -55,7 +55,8 @@ void displayBlock(Fields **fields, int count, ColumnSizes *cSize, Args* args, Pt
     actualColumn++;
     if(actualColumn >= columns)
     {
-      printf("\n");
+			if(i != count-1)
+				printf("\n");
       actualChar = 0;
       actualColumn = 0;
     }
