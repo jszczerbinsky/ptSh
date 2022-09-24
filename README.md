@@ -1,6 +1,8 @@
 [![](https://img.shields.io/github/downloads/jszczerbinsky/ptSh/total.svg)](https://github.com/jszczerbinsky/ptSh/releases/latest)
 [![](https://img.shields.io/aur/version/ptsh)](https://aur.archlinux.org/packages/ptsh)
 
+<a href="https://www.buymeacoffee.com/jszczerbinsky" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+
 ![](/img/screenshot.png)
 
 ## What is ptSh?
