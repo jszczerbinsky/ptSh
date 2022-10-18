@@ -1,4 +1,4 @@
-.PHONY: all obj ptls ptcp ptpwd
+.PHONY: all obj clean install uninstall
 
 CC=cc
 LDFLAGS=-lm
