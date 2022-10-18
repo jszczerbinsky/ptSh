@@ -1,5 +1,9 @@
 #include <sys/stat.h>
 
+#ifndef PREFIX
+#define PREFIX "/usr/local"
+#endif
+
 #ifndef COMMON_CONFIG_PARSER_H
 #define COMMON_CONFIG_PARSER_H
 
