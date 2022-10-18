@@ -1,19 +1,36 @@
+.PHONY: all obj ptls ptcp ptpwd
+
+CC=cc
+LDFLAGS=-lm
+PREFIX=/usr/local
+
 TAG=$(shell git describe --exact-match --tags 2>/dev/null)
 COMMIT=$(shell echo "cloned commit: " && git rev-parse --short HEAD 2>/dev/null)
 
 VER=$(or $(TAG),$(COMMIT))
 
-all:
+SRC=$(shell find src -iname "*.c")
+OBJ=$(subst src/,obj/,$(SRC:.c=.o))
+
+TARGETS=ptls ptcp ptpwd
+BIN=$(addprefix build/bin/,$(TARGETS))
+
+obj/%.o: src/%.c
+	mkdir -p $(dir $@)
+	$(CC) -c -DPREFIX=\"$(PREFIX)\" $(CFLAGS) $(LDFLAGS) -o $@ $^
+
+build/bin/%: obj/%/*.o
+	mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -DPREFIX=\"$(PREFIX)\" $(LDFLAGS) obj/common/*.o -o $@ $^
+
+all: obj
+	$(MAKE) $(BIN) CC=$(CC) CFLAGS=$(CFLAGS) LDFLAGS=$(LDFLAGS) PREFIX="$(PREFIX)"
 	mkdir -p build
-	rm -rf build/*
 	mkdir -p build/bin
 	mkdir -p build/share
 	mkdir -p build/share/ptSh
 	mkdir -p build/share/licenses
 	mkdir -p build/share/licenses/ptSh
-	gcc src/common/*.c src/ptls/*.c -lm -o build/bin/ptls
-	gcc src/common/*.c src/ptpwd/*.c -lm -o build/bin/ptpwd
-	gcc src/common/*.c src/ptcp/*.c -lm -o build/bin/ptcp
 	cp src/ptsh.sh build/bin/ptsh
 	cp src/config build/share/ptSh/config
 	cp LICENSE build/share/ptSh/LICENSE
@@ -22,15 +39,20 @@ all:
 	echo "Version: " | tee build/share/ptSh/version.txt
 	echo $(VER) | tee -a build/share/ptSh/version.txt
 
-	
+obj: $(OBJ)
+
+clean:
+	rm -rf build/*
+	rm -rf obj/*
+
 install:
-	cp -R build/* $(DESTDIR)/usr
-	$(DESTDIR)/usr/bin/ptsh
+	cp -R build/* $(PREFIX)
+	$(PREFIX)/bin/ptsh
 
 uninstall:
-	rm -rf $(DESTDIR)/usr/share/ptSh
-	rm $(DESTDIR)/usr/bin/ptls
-	rm $(DESTDIR)/usr/bin/ptpwd
-	rm $(DESTDIR)/usr/bin/ptcp
-	rm $(DESTDIR)/usr/bin/ptsh
-	rm -rf $(DESTDIR)/usr/share/licenses/ptSh
+	rm -rf $(PREFIX)/share/ptSh
+	rm $(PREFIX)/bin/ptls
+	rm $(PREFIX)/bin/ptpwd
+	rm $(PREFIX)/bin/ptcp
+	rm $(PREFIX)/bin/ptsh
+	rm -rf $(PREFIX)/share/licenses/ptSh

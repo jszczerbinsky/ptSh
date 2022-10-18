@@ -4,7 +4,7 @@
 
 #include "configParser.h"
 
-#define DEFAULT_CONFIG_PATH "/usr/share/ptSh/config"
+#define DEFAULT_CONFIG_PATH (PREFIX "/share/ptSh/config")
 #define CONFIG_PATH "/.config/ptSh/config"
 
 void setPattern(char** destination, char* line, const char* pattern)
